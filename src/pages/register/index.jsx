@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './RegisterForm.css'; // Importa tu CSS
+import './RegisterForm.css';
 import { IonIcon } from '@ionic/react';
 import { 
   personOutline, 
@@ -7,11 +7,10 @@ import {
   lockClosedOutline, 
   eyeOffOutline, 
   eyeOutline, 
-  logoTwitch, 
-  logoTwitter, 
   logoInstagram, 
   logoTiktok 
 } from 'ionicons/icons';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +19,8 @@ const RegisterForm = () => {
     password: ''
   });
 
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); // Inicializa navigate con useNavigate
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,8 +29,8 @@ const RegisterForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí iría la lógica para manejar el envío del formulario
     console.log(formData);
+    navigate('/login'); // Redirige a la pantalla de login
   };
 
   const togglePasswordVisibility = () => {
@@ -72,7 +72,7 @@ const RegisterForm = () => {
           <div className="container-input" style={{ position: 'relative' }}>
             <IonIcon icon={lockClosedOutline} />
             <input
-              type={showPassword ? "text" : "password"} // Cambia entre texto y contraseña
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               name="password"
               value={formData.password}
