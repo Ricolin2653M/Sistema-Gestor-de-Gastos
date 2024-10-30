@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './RegisterForm.css'; // Importa tu CSS
+import './RegisterForm.css';
 import { IonIcon } from '@ionic/react';
 import { 
   personOutline, 
@@ -7,11 +7,10 @@ import {
   lockClosedOutline, 
   eyeOffOutline, 
   eyeOutline, 
-  logoTwitch, 
-  logoTwitter, 
   logoInstagram, 
   logoTiktok 
 } from 'ionicons/icons';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +19,8 @@ const RegisterForm = () => {
     password: ''
   });
 
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,8 +29,8 @@ const RegisterForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí iría la lógica para manejar el envío del formulario
     console.log(formData);
+    navigate('/login');
   };
 
   const togglePasswordVisibility = () => {
@@ -38,16 +38,16 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="container">
-      <div className="container-form">
+    <div className="register-container">
+      <div className="register-form-wrapper">
         <form className="sign-up" onSubmit={handleSubmit}>
-          <h2>Registrarse</h2>
-          <div className="social-networks">
+          <h2 className="register-form-header">Registrarse</h2>
+          <div className="register-social-networks">
             <IonIcon icon={logoInstagram} />
             <IonIcon icon={logoTiktok} />
           </div>
-          <span>Use su correo electrónico para registrarse</span>
-          <div className="container-input">
+          <span className="register-form-text">Use su correo electrónico para registrarse</span>
+          <div className="register-input-container">
             <IonIcon icon={personOutline} />
             <input
               type="text"
@@ -58,7 +58,7 @@ const RegisterForm = () => {
               required
             />
           </div>
-          <div className="container-input">
+          <div className="register-input-container">
             <IonIcon icon={mailOutline} />
             <input
               type="email"
@@ -69,10 +69,10 @@ const RegisterForm = () => {
               required
             />
           </div>
-          <div className="container-input" style={{ position: 'relative' }}>
+          <div className="register-input-container" style={{ position: 'relative' }}>
             <IonIcon icon={lockClosedOutline} />
             <input
-              type={showPassword ? "text" : "password"} // Cambia entre texto y contraseña
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               name="password"
               value={formData.password}
@@ -91,7 +91,7 @@ const RegisterForm = () => {
               }} 
             />
           </div>
-          <button className="button" type="submit">REGISTRARSE</button>
+          <button className="register-button" type="submit">REGISTRARSE</button>
         </form>
       </div>
     </div>
