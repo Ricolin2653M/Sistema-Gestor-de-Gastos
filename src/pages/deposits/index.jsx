@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Table } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import "../deposits/depositos.css";
 
 const Deposits = () => {
   const data = [
@@ -25,7 +26,6 @@ const Deposits = () => {
       date: '2024-10-10',
       amount: '$10,000.00 MXN',
     },
-    // Puedes agregar más datos si quieres extender la tabla
   ];
 
   const columns = [
@@ -34,56 +34,59 @@ const Deposits = () => {
       dataIndex: 'type',
       key: 'type',
       render: () => <Button shape="round">Deposit</Button>,
+      width: 150,
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      width: 300,
     },
     {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
+      width: 200,
     },
     {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
+      width: 200,
     },
     {
       title: 'Actions',
       key: 'actions',
       render: () => (
         <>
-          <Button icon={<EditOutlined />} style={{ marginRight: 8 }} />
-          <Button icon={<DeleteOutlined />} />
+          <Button icon={<EditOutlined />} style={{ marginRight: 8 }} shape="circle" className="hover-edit"/>
+          <Button icon={<DeleteOutlined />} shape="circle"  className="hover-delete" // Añadir clase hover-delete
+          />
         </>
       ),
+      width: 150,
     },
   ];
 
   return (
-    <div
-      style={{
-        padding: 20,
-        height: '380vh', // Ajusta la altura del contenedor para que la tabla ocupe más espacio
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100' }}>
-        <h1>Deposits</h1>
-        <Button icon={<PlusOutlined />} type="primary">
-          Add transaction
-        </Button>
+    <div >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 className="deposits-titulo">Deposits</h1>
+        <button className="add-transaction-btn">
+        <p className="add-transaction-name">Add transaction</p>
+        <span className="icon">
+            <PlusOutlined /> 
+        </span>
+</button>
+
       </div>
 
-      <div style={{ flexGrow: 1, overflowY: 'auto' }}>
+      <div className="table-container">
         <Table
           columns={columns}
           dataSource={data}
-          pagination={false}
-          style={{ height: '100%' }} // Hace que la tabla se ajuste al tamaño del contenedor
+          pagination={{ pageSize: 5 }}
+          style={{ marginTop: 20 }} 
         />
       </div>
     </div>
