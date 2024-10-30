@@ -34,7 +34,7 @@ const Login = () => {
           <Form.Item
             label="Usuario"
             name="username"
-            rules={[{ required: true, message: "Por favor ingresa tu usuario!" }]}
+            //rules={[{ required: true, message: "Por favor ingresa tu usuario!" }]}
           >
             <Input placeholder="Ingresa tu usuario" />
           </Form.Item>
@@ -42,7 +42,7 @@ const Login = () => {
           <Form.Item
             label="Contraseña"
             name="password"
-            rules={[{ required: true, message: "Por favor ingresa tu contraseña!" }]}
+            //rules={[{ required: true, message: "Por favor ingresa tu contraseña!" }]}
           >
             <Input.Password placeholder="Ingresa tu contraseña" />
           </Form.Item>
