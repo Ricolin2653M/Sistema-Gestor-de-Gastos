@@ -26,7 +26,6 @@ const Deposits = () => {
       date: '2024-10-10',
       amount: '$10,000.00 MXN',
     },
-    // Puedes agregar más datos para probar el scroll
   ];
 
   const columns = [
@@ -76,7 +75,7 @@ const Deposits = () => {
         <button className="add-transaction-btn">
         <p className="add-transaction-name">Add transaction</p>
         <span className="icon">
-            <PlusOutlined /> {/* Cambia este ícono según el de tu preferencia */}
+            <PlusOutlined /> 
         </span>
 </button>
 
