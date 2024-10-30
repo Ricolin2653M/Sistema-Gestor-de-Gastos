@@ -43,6 +43,7 @@ body {
 .register-form-header {
   font-size: 30px;
   margin-bottom: 20px;
+  color: black;
 }
 
 .register-social-networks {
@@ -56,11 +57,13 @@ body {
   border-radius: 6px;
   padding: 8px;
   cursor: pointer;
+  color: black;
 }
 
 .register-form-text {
   font-size: 12px;
   margin-bottom: 15px;
+  color: black;
 }
 
 .register-input-container {
@@ -73,6 +76,7 @@ body {
   gap: 8px;
   padding: 0 15px;
   background-color: #EEEEEE;
+  color: black;
 }
 
 .register-input-container input {
