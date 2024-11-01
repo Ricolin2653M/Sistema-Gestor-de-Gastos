@@ -1,0 +1,46 @@
+.navbar {
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido de la barra */
+    background-color: #004080; /* Color azul */
+    padding: 0; /* Elimina el padding para que la barra se ajuste al tamaño deseado */
+    height: 96px; /* Altura de 1 pulgada */
+    width: 100%; /* Asegura que la barra cubra todo el ancho de la pantalla */
+    position: fixed; /* Fija la barra en la parte superior */
+    top: 0; /* Alinea la barra al borde superior de la pantalla */
+    left: 0; /* Alinea la barra al borde izquierdo de la pantalla */
+    z-index: 1000; /* Asegúrate de que la barra esté encima de otros elementos */
+}
+
+.logo {
+    margin-right: auto; /* Coloca el logo a la izquierda */
+}
+
+.nav-link-container {
+    display: flex;
+    justify-content: center; /* Centra los enlaces horizontalmente */
+    gap: 2in; /* Separación de 2 pulgadas entre los enlaces */
+    flex-grow: 1; /* Permite que el contenedor de enlaces ocupe todo el espacio disponible */
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s;
+    text-align: center; /* Asegura que el texto dentro de cada enlace esté centrado */
+}
+
+.nav-link:hover {
+    background-color: #0066cc; /* Color resaltado */
+    border-radius: 5px;
+}
+
+.user-icon-container {
+    margin-left: auto; /* Asegura que el contenedor del ícono se alinee a la derecha */
+    padding-right: 20px; /* Espaciado a la derecha del ícono */
+}
+
+.user-icon {
+    font-size: 24px; /* Ajusta el tamaño del ícono según sea necesario */
+    color: white; /* Color del ícono */
+}
