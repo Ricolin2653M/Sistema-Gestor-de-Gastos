@@ -41,6 +41,7 @@ const Expenses = () => {
       dataIndex: 'description',
       key: 'description',
       width: 300,
+      ellipsis: true,
     },
     {
       title: 'Date',
@@ -87,6 +88,7 @@ const Expenses = () => {
           dataSource={data}
           pagination={{ pageSize: 5 }}
           style={{ marginTop: 20 }} 
+          scroll={{ y: 300 }} // Permite desplazamiento vertical dentro de la tabla
         />
       </div>
     </div>

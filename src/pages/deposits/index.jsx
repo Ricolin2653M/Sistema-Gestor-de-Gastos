@@ -41,6 +41,7 @@ const Deposits = () => {
       dataIndex: 'description',
       key: 'description',
       width: 300,
+      ellipsis: true,
     },
     {
       title: 'Date',
@@ -86,7 +87,8 @@ const Deposits = () => {
           columns={columns}
           dataSource={data}
           pagination={{ pageSize: 5 }}
-          style={{ marginTop: 20 }} 
+          scroll={{ y: 300 }} // Permitir desplazamiento vertical
+          
         />
       </div>
     </div>

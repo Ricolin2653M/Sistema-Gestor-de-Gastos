@@ -4,6 +4,7 @@ import NavBar from './componets/Nav/NavBar';
 import AppRoutes from './routes';
 import './App.css';
 
+
 function App() {
   return (
     <BrowserRouter>
