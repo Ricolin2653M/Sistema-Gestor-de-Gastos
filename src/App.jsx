@@ -1,15 +1,16 @@
-import { Card, Col, Row } from 'antd';
-import { BrowserRouter } from 'react-router-dom';
-import NavBar from './componets/Nav/NavBar'; 
+import { BrowserRouter } from 'react-router-dom'; 
+import { AuthProvider } from './context/AuthContext'; 
 import AppRoutes from './routes';
+import NavBar from './componets/Nav/NavBar';
 import './App.css';
-
 
 function App() {
   return (
     <BrowserRouter>
-      <NavBar /> {/* Renderiza NavBar en todas las páginas */}
-      <AppRoutes />
+      <AuthProvider>
+        <NavBar />
+        <AppRoutes />
+      </AuthProvider>
     </BrowserRouter>
   );
 }
