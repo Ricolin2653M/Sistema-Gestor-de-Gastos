@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { register } from '../../service/auth.service'; // Asegúrate de importar el servicio de registro
+import authService from '../../services/auth.service'
 import { Button, Input, Form, message } from 'antd'; // Usamos Ant Design para los elementos de formulario
 import { IonIcon } from '@ionic/react';
 import { 
@@ -9,7 +9,7 @@ import {
   eyeOffOutline, 
   eyeOutline, 
   logoInstagram, 
-  logoTiktok 
+  logoTiktok
 } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
 import './RegisterForm.css';
@@ -37,20 +37,16 @@ const RegisterForm = () => {
 
     try {
       // Llamada al servicio de registro
-      const response = await register(formData.name, formData.lastname, formData.email, formData.password);
+      const response = await authService.register(formData.name, formData.lastname, formData.email, formData.password);
 
-      // Si la respuesta es exitosa, mostrar mensaje
       message.success(response.message || 'Usuario registrado con éxito');
       
-      // Limpiar los campos después del registro exitoso
       setFormData({
         name: '',
         lastname: '',
         email: '',
         password: ''
       });
-
-      // Redirigir a la página de login después del registro exitoso
       navigate('/login');
     } catch (error) {
       message.error('Error al registrar el usuario. Intenta nuevamente.');

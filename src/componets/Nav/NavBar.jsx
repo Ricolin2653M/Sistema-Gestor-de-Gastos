@@ -21,6 +21,7 @@ const NavBar = () => {
         <Link className="nav-link" to="/">Home</Link>
         <Link className="nav-link" to="/deposits">Depositos</Link>
         <Link className="nav-link" to="/expenses">Gastos</Link>
+        <Link className="nav-link" to="/login">login</Link>
       </div>
       <div className="user-icon-container">
         <IonIcon icon={personOutline} className="user-icon" />
