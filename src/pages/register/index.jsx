@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './RegisterForm.css';
+import { register } from '../../service/auth.service'; // Asegúrate de importar el servicio de registro
+import { Button, Input, Form, message } from 'antd'; // Usamos Ant Design para los elementos de formulario
 import { IonIcon } from '@ionic/react';
 import { 
   personOutline, 
@@ -11,15 +12,18 @@ import {
   logoTiktok 
 } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
+import './RegisterForm.css';
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     name: '',
+    lastname: '',
     email: '',
     password: ''
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,10 +31,33 @@ const RegisterForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    navigate('/login');
+    setLoading(true);
+
+    try {
+      // Llamada al servicio de registro
+      const response = await register(formData.name, formData.lastname, formData.email, formData.password);
+
+      // Si la respuesta es exitosa, mostrar mensaje
+      message.success(response.message || 'Usuario registrado con éxito');
+      
+      // Limpiar los campos después del registro exitoso
+      setFormData({
+        name: '',
+        lastname: '',
+        email: '',
+        password: ''
+      });
+
+      // Redirigir a la página de login después del registro exitoso
+      navigate('/login');
+    } catch (error) {
+      message.error('Error al registrar el usuario. Intenta nuevamente.');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -40,59 +67,74 @@ const RegisterForm = () => {
   return (
     <div className="register-container">
       <div className="register-form-wrapper">
-        <form className="sign-up" onSubmit={handleSubmit}>
-          <h2 className="register-form-header">Registrarse</h2>
-          <div className="register-social-networks">
-            <IonIcon icon={logoInstagram} />
-            <IonIcon icon={logoTiktok} />
-          </div>
-          <span className="register-form-text">Use su correo electrónico para registrarse</span>
-          <div className="register-input-container">
-            <IonIcon icon={personOutline} />
-            <input
+        <h2 className="register-form-header">Registrarse</h2>
+        <div className="register-social-networks">
+          <IonIcon icon={logoInstagram} />
+          <IonIcon icon={logoTiktok} />
+        </div>
+        
+
+        <Form onSubmitCapture={handleSubmit}>
+          <Form.Item label="Nombre" required={false}>
+            <Input
               type="text"
-              placeholder="Nombre"
+              placeholder="Ingrese su nombre"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              required
             />
-          </div>
-          <div className="register-input-container">
-            <IonIcon icon={mailOutline} />
-            <input
+          </Form.Item>
+
+          <Form.Item label="Apellido" required={false}>
+            <Input
+              type="text"
+              placeholder="Ingrese su apellido"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+            />
+          </Form.Item>
+
+          <Form.Item label="Correo Electrónico" required={false}>
+            <Input
               type="email"
-              placeholder="Email"
+              placeholder="Ingrese su correo electrónico"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              required
             />
-          </div>
-          <div className="register-input-container" style={{ position: 'relative' }}>
-            <IonIcon icon={lockClosedOutline} />
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <IonIcon 
-              icon={showPassword ? eyeOutline : eyeOffOutline} 
-              onClick={togglePasswordVisibility} 
-              style={{ 
-                position: 'absolute', 
-                right: '10px', 
-                top: '50%', 
-                transform: 'translateY(-50%)', 
-                cursor: 'pointer' 
-              }} 
-            />
-          </div>
-          <button className="register-button" type="submit">REGISTRARSE</button>
-        </form>
+          </Form.Item>
+
+          <Form.Item label="Contraseña" required={false}>
+            <div style={{ position: 'relative' }}>
+             
+              <Input.Password
+                placeholder="Ingrese su contraseña"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                iconRender={(visible) =>
+                  visible ? <IonIcon icon={eyeOutline} onClick={togglePasswordVisibility} /> : <IonIcon icon={eyeOffOutline} onClick={togglePasswordVisibility} />
+                }
+              />
+            </div>
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              className="register-button"
+            >
+              Registrarse
+            </Button>
+          </Form.Item>
+        </Form>
+
+        <p className="register-form-text" style={{ textAlign: 'right' }}>
+          ¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a>
+        </p>
       </div>
     </div>
   );

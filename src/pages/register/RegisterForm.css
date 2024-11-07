@@ -17,14 +17,17 @@ body {
 }
 
 .register-container {
-  width: 400px;
-  height: 500px;
+  width: 100%;
+  max-width: 400px;
+  min-height: 500px;
   display: flex;
   position: relative;
   background-color: white;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  flex-direction: column;
+  padding: 20px;
 }
 
 .register-form-wrapper {
@@ -33,26 +36,28 @@ body {
 }
 
 .register-form-wrapper form {
-  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
 .register-form-header {
-  font-size: 30px;
-  margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 15px;
   color: black;
+  text-align: center;
 }
 
 .register-social-networks {
   display: flex;
+  justify-content: center; /* Centra los iconos */
   gap: 12px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .register-social-networks ion-icon {
+  font-size: 24px; /* Tamaño de los iconos */
   border: 1px solid #C9CCCB;
   border-radius: 6px;
   padding: 8px;
@@ -62,21 +67,23 @@ body {
 
 .register-form-text {
   font-size: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   color: black;
+  text-align: center;
 }
 
 .register-input-container {
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   height: 40px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
   padding: 0 15px;
   background-color: #EEEEEE;
-  color: black;
+  color:  #004080;
 }
 
 .register-input-container input {
@@ -88,13 +95,48 @@ body {
 }
 
 .register-button {
-  width: 170px;
+  width: 100%;
+  max-width: 170px;
   height: 45px;
   font-size: 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
-  background-color: #485af7;
+  margin-top: 20px;
+  background-color:  #004080;
   color: white;
+}
+
+.register-form-wrapper p {
+  font-size: 12px;
+  text-align: right;
+  margin-top: 20px;
+}
+
+.ant-form-item-label {
+  text-align: left; /* Alinea los nombres de los campos a la izquierda */
+}
+
+@media (max-width: 768px) {
+  .register-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .register-form-header {
+    font-size: 20px;
+  }
+
+  .register-social-networks ion-icon {
+    font-size: 20px;
+  }
+
+  .register-button {
+    width: 100%;
+    max-width: 150px;
+  }
+
+  .ant-form-item-label {
+    font-size: 14px;
+  }
 }
