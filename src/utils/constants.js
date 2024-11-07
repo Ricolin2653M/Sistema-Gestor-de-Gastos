@@ -1,5 +1,5 @@
 export const ENV = {
-    API_URL: 'http://localhost:3000',
+    API_URL: 'https://aplicacion-sgp.vercel.app',
 
     // Endpoints de la API
     ENDPOINTS: {
