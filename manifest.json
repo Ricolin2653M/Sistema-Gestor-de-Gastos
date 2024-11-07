@@ -1,0 +1,39 @@
+{
+    "short_name": "AplicacionNGP ",
+    "name": "App de publicaciones",
+    "start_url":"/index.html",
+    "background_color":"#2148c0",
+    "theme_color":"#2148c0",
+    "display":"standalone",
+    "id":"proyecto",
+    "orientation":"portrait",
+    "icons":[
+        {
+        
+            "src": "icons/logo-64x64.png",
+            "type":"image/png",
+            "sizes":"64x64"
+        },
+        {
+        
+            "src": "icons/logo-192x192.png",
+            "type":"image/png",
+            "sizes":"192x192"
+        },
+    
+    {
+        "src": "icons/logo-512x512.png",
+        "type":"image/png",
+        "sizes":"512x512"
+    }
+   
+   
+],
+"splash_pages":"null",
+"splash_screen":
+{
+    "show":true,
+    "src":"splash-screen.png"
+}
+
+}
