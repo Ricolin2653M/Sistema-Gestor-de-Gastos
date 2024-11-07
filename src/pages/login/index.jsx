@@ -62,7 +62,7 @@ const Login = () => {
           className="login-form"
         >
           <Form.Item
-            label="Usuario"
+            label="Correo electrónico"
             name="username"
             rules={[{ required: true, message: "Por favor ingresa tu usuario!" }]}
           >

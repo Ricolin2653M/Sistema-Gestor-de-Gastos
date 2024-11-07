@@ -21,7 +21,6 @@ export const AuthProvider = (props) => {
     const getSession = async () => {
         const token = await storageController.getToken();
         
-        // Imprime el token en la consola
         console.log("Token:", token);
 
         if (!token) {
@@ -55,8 +54,7 @@ export const AuthProvider = (props) => {
             await storageController.removeToken();
             setUser(null);
             setLoading(false);
-            // Redirigir usando navigate en lugar de window.location.replace
-            navigate('/');
+            navigate('/login');
         } catch (error) {
             console.error(error);
             setLoading(false);
