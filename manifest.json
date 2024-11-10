@@ -1,6 +1,6 @@
 {
     "short_name": "AplicacionNGP ",
-    "name": "App de publicaciones",
+    "name": "App de Sistema de Gestión de Gastos",
     "start_url":"/index.html",
     "background_color":"#2148c0",
     "theme_color":"#2148c0",

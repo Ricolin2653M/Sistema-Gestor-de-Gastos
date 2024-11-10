@@ -6,36 +6,33 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 export default defineConfig({
   plugins: [
     viteStaticCopy({
-      targets:[
-        
+      targets: [
+
         {
-          src:'sw.js',
+          src: 'sw.js',
           dest: ''
         },
         {
-          src:'manifest.json',
-          dest: ''
-        },
-        
-       
-       
-        {
-          src:'public',
+          src: 'manifest.json',
           dest: ''
         },
         {
-          src:'icons',
+          src: 'public',
+          dest: ''
+        },
+        {
+          src: 'icons',
           dest: 'assets/img'
         },
 
       ],
-      }),
-      react(),
+    }),
+    react(),
   ],
   build: {
     rollupOptions: {
       output: {
-        entryFileNames:'assets/index-001.js',
+        entryFileNames: 'assets/index-001.js',
       },
     },
   },
