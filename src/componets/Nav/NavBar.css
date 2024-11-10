@@ -1,46 +1,159 @@
 .navbar {
-    display: flex;
-    align-items: center; /* Centra verticalmente el contenido de la barra */
-    background-color: #004080; /* Color azul */
-    padding: 0; /* Elimina el padding para que la barra se ajuste al tamaño deseado */
-    height: 96px; /* Altura de 1 pulgada */
-    width: 100%; /* Asegura que la barra cubra todo el ancho de la pantalla */
-    position: fixed; /* Fija la barra en la parte superior */
-    top: 0; /* Alinea la barra al borde superior de la pantalla */
-    left: 0; /* Alinea la barra al borde izquierdo de la pantalla */
-    z-index: 1000; /* Asegúrate de que la barra esté encima de otros elementos */
+  display: flex;
+  align-items: center; /* Centra verticalmente el contenido de la barra */
+  background-color: #004080; /* Color azul */
+  padding: 0; /* Elimina el padding para que la barra se ajuste al tamaño deseado */
+  height: 80px; /* Altura de 1 pulgada */
+  width: 100%; /* Asegura que la barra cubra todo el ancho de la pantalla */
+  position: fixed; /* Fija la barra en la parte superior */
+  top: 0; /* Alinea la barra al borde superior de la pantalla */
+  left: 0; /* Alinea la barra al borde izquierdo de la pantalla */
+  z-index: 1000; /* Asegúrate de que la barra esté encima de otros elementos */
+  flex-wrap: wrap; 
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;  /* Esto asegura que los elementos estén dispersos */
+  align-items: center;
+  padding: 0 15px;
+  margin: auto;
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+  
+ 
 }
 
 .logo {
-    margin-right: auto; /* Coloca el logo a la izquierda */
+ 
+  margin-right: 50px; 
+}
+
+.logo img {
+  border-radius: 50%; /* Hace que el logo tenga bordes redondeados */
+  height: 40px; /* Ajusta el tamaño del logo */
+  width: 40px;
+  margin-top: -5px;
 }
 
 .nav-link-container {
-    display: flex;
-    justify-content: center; /* Centra los enlaces horizontalmente */
-    gap: 2in; /* Separación de 2 pulgadas entre los enlaces */
-    flex-grow: 1; /* Permite que el contenedor de enlaces ocupe todo el espacio disponible */
+  display: flex;
+  justify-content: center; /* Centra los enlaces horizontalmente */
+  gap: 90px; /* Separación entre los enlaces */
+  flex-grow: 1;
+  margin-top: -5px;
+}
+
+/* Alineación de los botones de perfil y logout a la derecha */
+.auth-buttons {
+  margin-left: auto; /* Empuja los botones hacia la derecha */
+  display: flex;
+  gap: 10px; /* Espacio entre los botones */
 }
 
 .nav-link {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s;
-    text-align: center; /* Asegura que el texto dentro de cada enlace esté centrado */
+  color: #ecf0f1;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background 0.3s ease, color 0.3s ease;
+  align-items: center;
+}
+
+.nav-link.active {
+  color: #ffffff;
+  box-shadow: inset 0 -3px 0 0 #ffffff; /* Subrayado animado */
+  transform: scale(1.05); /* Efecto de escala */
 }
 
 .nav-link:hover {
-    background-color: #0066cc; /* Color resaltado */
-    border-radius: 5px;
+  background-color: #34495e;
 }
 
-.user-icon-container {
-    margin-left: auto; /* Asegura que el contenedor del ícono se alinee a la derecha */
-    padding-right: 20px; /* Espaciado a la derecha del ícono */
+/* Estilo para el botón de perfil */
+.profile-btn {
+  background-color: transparent; /* Sin fondo */
+  border: none; /* Sin borde */
+  color: white; /* Color del icono */
+  font-size: 24px; /* Tamaño del icono */
+  cursor: pointer; /* Cambia el cursor cuando se pasa por encima */
+  padding: 8px 35px; /* Espaciado alrededor del icono */
+  border-radius: 5px; /* Bordes redondeados */
+  display: flex; /* Para centrar el icono dentro del botón */
+  justify-content: center; /* Centra el icono horizontalmente */
+  align-items: center; /* Centra el icono verticalmente */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Transición suave */
 }
 
-.user-icon {
-    font-size: 24px; /* Ajusta el tamaño del ícono según sea necesario */
-    color: white; /* Color del ícono */
+.profile-btn:hover {
+  background-color: #004080; /* Fondo azul más oscuro cuando se pasa por encima */
+}
+
+/* Estilo para el botón de logout */
+.logout-btn {
+  color: #ffffff;
+  background-color: #d12410a8;  /* Color diferente para el botón de Logout */
+  padding: 10px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0px;
+  gap: 5px;
+  
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;  /* Color más oscuro al hacer hover */
+}
+
+/* Estilos para el menú móvil */
+@media (max-width: 768px) {
+  .nav-link-container {
+    position: absolute;
+    top: 90px;
+    right: 0;
+    background-color: #004080;
+    flex-direction: column;
+    width: 100%;
+    max-width: 250px;
+    padding: 10px;
+    gap: 10px;
+    display: none;
+    z-index: 999; 
+  }
+
+  .nav-link-container.open {
+    display: flex;
+  }
+
+  /* Mostrar el ícono de menú solo en pantallas pequeñas */
+  .menu-icon {
+    display: block;
+    z-index: 1000; 
+    color: white; 
+    font-size: 30px; 
+  }
+
+  .nav-link-container .nav-link {
+    font-size: 18px; /* Ajusta el tamaño de la fuente en el menú móvil */
+  }
+}
+
+
+/* Vista de pantallas medianas (768px a 1200px) */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .navbar {
+      height: 70px;
+  }
+
+  .nav-link-container {
+      gap: 20px;
+  }
+
+  .nav-link {
+      font-size: 15px;
+  }
+
+  
 }
