@@ -1,3 +1,4 @@
+/* Estilos Generales */
 body {
     background-color: #f5f5f5;
     margin: 0;
@@ -24,9 +25,9 @@ body {
     display: flex;
     align-items: center;
     font-size: 16px;
-    color: #1890ff; 
-    background-color: transparent; 
-    border: none; 
+    color: #1890ff;
+    background-color: transparent;
+    border: none;
     cursor: pointer;
 }
 
@@ -36,24 +37,24 @@ body {
     justify-content: center;
     width: 24px;
     height: 24px;
-    border: 2px solid #1890ff; 
-    border-radius: 50%; 
-    margin-left: 8px; 
+    border: 2px solid #1890ff;
+    border-radius: 50%;
+    margin-left: 8px;
     color: #1890ff;
 }
 
 .add-transaction-btn:hover .icon {
-    color: #40a9ff; 
-    border-color: #40a9ff; 
+    color: #40a9ff;
+    border-color: #40a9ff;
 }
 
 .add-transaction-btn:hover {
-    color: #40a9ff; 
+    color: #40a9ff;
 }
 
 .table-container {
-    overflow-x: auto; 
-    padding-bottom: 20px; 
+    overflow-x: auto;
+    padding-bottom: 20px;
 }
 
 .ant-table {
@@ -73,30 +74,56 @@ body {
     background-color: #e6f7ff;
 }
 
-.action-button-edit {
+.hover-edit {
     background-color: yellow;
     color: white;
     border-color: yellow;
 }
 
-.action-button-edit:hover {
-    background-color: #ffc107; 
-    border-color: #ffc107; 
-    color: white; 
+.hover-edit:hover {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: white;
 }
 
-.action-button-delete {
+.hover-delete {
     background-color: red;
     color: white;
     border-color: red;
 }
 
-.action-button-delete:hover {
-    background-color: #ff4d4f; 
-    border-color: #ff4d4f; 
-    color: white; 
+.hover-delete:hover {
+    background-color: #ff4d4f;
+    border-color: #ff4d4f;
+    color: white;
 }
 
-.add-transaction-name{
+.add-transaction-name {
     color: black;
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    .deposits-titulo {
+        font-size: 20px;
+    }
+    
+    .add-transaction-btn {
+        font-size: 14px;
+    }
+
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    .table-container {
+        padding-bottom: 10px;
+    }
+    
+    /* Ocultar algunas columnas en pantallas pequeñas */
+    .ant-table-column-type, .ant-table-column-actions {
+        display: none; /* Esconde las columnas 'Type' y 'Actions' en móviles */
+    }
 }

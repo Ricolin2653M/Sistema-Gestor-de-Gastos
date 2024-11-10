@@ -35,6 +35,7 @@ const Deposits = () => {
       key: 'type',
       render: () => <Button shape="round">Deposit</Button>,
       width: 150,
+      className: 'ant-table-column-type', // Clase para ocultar en móviles
     },
     {
       title: 'Description',
@@ -61,25 +62,24 @@ const Deposits = () => {
       render: () => (
         <>
           <Button icon={<EditOutlined />} style={{ marginRight: 8 }} shape="circle" className="hover-edit"/>
-          <Button icon={<DeleteOutlined />} shape="circle"  className="hover-delete" // Añadir clase hover-delete
-          />
+          <Button icon={<DeleteOutlined />} shape="circle" className="hover-delete"/>
         </>
       ),
       width: 150,
+      className: 'ant-table-column-actions', // Clase para ocultar en móviles
     },
   ];
 
   return (
-    <div >
+    <div className="deposits-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 className="deposits-titulo">Deposits</h1>
         <button className="add-transaction-btn">
-        <p className="add-transaction-name">Add transaction</p>
-        <span className="icon">
+          <p className="add-transaction-name">Add transaction</p>
+          <span className="icon">
             <PlusOutlined /> 
-        </span>
-</button>
-
+          </span>
+        </button>
       </div>
 
       <div className="table-container">
@@ -87,8 +87,7 @@ const Deposits = () => {
           columns={columns}
           dataSource={data}
           pagination={{ pageSize: 5 }}
-          scroll={{ y: 300 }} // Permitir desplazamiento vertical
-          
+          scroll={{ y: 300 }}
         />
       </div>
     </div>
