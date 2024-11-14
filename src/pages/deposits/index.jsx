@@ -1,39 +1,61 @@
-import React from 'react';
-import { Button, Table } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, notification, Table } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { AuthContext } from '../../context/AuthContext';
+import { usersService } from '../../services/users.service';
+import { depositService } from '../../services/deposit.services';
 import "../deposits/depositos.css";
+import moment from 'moment';
 
 const Deposits = () => {
-  const data = [
-    {
-      key: '1',
-      type: 'Deposit',
-      description: 'Deposito de pago en mi trabajo',
-      date: '2024-10-10',
-      amount: '$10,000.00 MXN',
-    },
-    {
-      key: '2',
-      type: 'Deposit',
-      description: 'Deposito de pago en mi trabajo',
-      date: '2024-10-10',
-      amount: '$10,000.00 MXN',
-    },
-    {
-      key: '3',
-      type: 'Deposit',
-      description: 'Deposito de pago en mi trabajo',
-      date: '2024-10-10',
-      amount: '$10,000.00 MXN',
-    },
-  ];
+  const { user } = useContext(AuthContext);
+  const token = localStorage.getItem('token');
+  const [userId, setUserId] = useState(null);
+  const [deposits, setDeposits] = useState([]);
+
+  useEffect(() => {
+    if (user && user._id) {
+      setUserId(user._id);
+      fetchDeposits(user._id);
+      console.log("id de usuario", userId);
+    }
+  }, [user]);
+/*
+  const fetchUserId = async () => {
+    try {
+      const user = await usersService.getMe(token);
+      setUserId(user._id);
+      console.log("User ID:", user._id); // Agrega este console.log aquí
+    } catch (error) {
+      console.log("error al obtener el usuario", error);
+      notification.error({ message: "error al obtener el usuario" });
+    }
+  };  
+*/
+  const fetchDeposits = async (userId) => {
+    try {
+      const depositsData = await depositService.getDeposits(token, userId);
+      setDeposits(depositsData);
+    } catch (error) {
+      console.error('Error al obtener los depósitos:', error);
+      notification.error({ message: 'Error al obtener los depósitos' });
+    }
+  };
 
   const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+      width: 200,
+    },
     {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      render: () => <Button shape="round">Deposit</Button>,
+      render: (type) => (
+        type && type.length > 0 ? type.join(", ") : "No Type"
+      ),
       width: 150,
     },
     {
@@ -47,6 +69,7 @@ const Deposits = () => {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
+      render: (date) => moment(date).format('YYYY-MM-DD'),
       width: 200,
     },
     {
@@ -58,11 +81,10 @@ const Deposits = () => {
     {
       title: 'Actions',
       key: 'actions',
-      render: () => (
+      render: (text, record) => (
         <>
-          <Button icon={<EditOutlined />} style={{ marginRight: 8 }} shape="circle" className="hover-edit"/>
-          <Button icon={<DeleteOutlined />} shape="circle"  className="hover-delete" // Añadir clase hover-delete
-          />
+          <Button icon={<EditOutlined />} style={{ marginRight: 8 }} shape="circle" className="hover-edit" />
+          <Button icon={<DeleteOutlined />} shape="circle" className="hover-delete" />
         </>
       ),
       width: 150,
@@ -70,25 +92,24 @@ const Deposits = () => {
   ];
 
   return (
-    <div >
+    <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 className="deposits-titulo">Deposits</h1>
         <button className="add-transaction-btn">
-        <p className="add-transaction-name">Add transaction</p>
-        <span className="icon">
-            <PlusOutlined /> 
-        </span>
-</button>
-
+          <p className="add-transaction-name">Add transaction</p>
+          <span className="icon">
+            <PlusOutlined />
+          </span>
+        </button>
       </div>
 
       <div className="table-container">
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={deposits}
+          rowKey="_id"
           pagination={{ pageSize: 5 }}
-          scroll={{ y: 300 }} // Permitir desplazamiento vertical
-          
+          scroll={{ y: 300 }}
         />
       </div>
     </div>
