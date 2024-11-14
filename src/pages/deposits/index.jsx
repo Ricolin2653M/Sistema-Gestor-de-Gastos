@@ -2,36 +2,26 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, notification, Table } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { AuthContext } from '../../context/AuthContext';
-import { usersService } from '../../services/users.service';
 import { depositService } from '../../services/deposit.services';
-import "../deposits/depositos.css";
 import moment from 'moment';
+import ModalAdd from '../../componets/DepositsModals/ModalAdd'; // Asegúrate de importar la modal
 
 const Deposits = () => {
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
   const [userId, setUserId] = useState(null);
   const [deposits, setDeposits] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false); // Estado para controlar la visibilidad de la modal
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user && user._id) {
       setUserId(user._id);
       fetchDeposits(user._id);
-      console.log("id de usuario", userId);
+      console.log("USER ID " +userId)
     }
   }, [user]);
-/*
-  const fetchUserId = async () => {
-    try {
-      const user = await usersService.getMe(token);
-      setUserId(user._id);
-      console.log("User ID:", user._id); // Agrega este console.log aquí
-    } catch (error) {
-      console.log("error al obtener el usuario", error);
-      notification.error({ message: "error al obtener el usuario" });
-    }
-  };  
-*/
+
   const fetchDeposits = async (userId) => {
     try {
       const depositsData = await depositService.getDeposits(token, userId);
@@ -40,6 +30,14 @@ const Deposits = () => {
       console.error('Error al obtener los depósitos:', error);
       notification.error({ message: 'Error al obtener los depósitos' });
     }
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true); // Mostrar la modal al hacer clic
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false); // Cerrar la modal
   };
 
   const columns = [
@@ -95,8 +93,8 @@ const Deposits = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 className="deposits-titulo">Deposits</h1>
-        <button className="add-transaction-btn">
-          <p className="add-transaction-name">Add transaction</p>
+        <button className="add-transaction-btn" onClick={showModal}>
+          <p className="add-transaction-name">Add deposit</p>
           <span className="icon">
             <PlusOutlined />
           </span>
@@ -112,6 +110,16 @@ const Deposits = () => {
           scroll={{ y: 300 }}
         />
       </div>
+
+      {/* Modal para agregar nuevo depósito */}
+      <ModalAdd 
+        isVisible={isModalVisible} 
+        onCancel={handleCancel} 
+        loading={loading} 
+        setLoading={setLoading} 
+        fetchData={() => fetchDeposits(userId)} // Pasamos la función para actualizar los datos después de agregar un depósito
+        userId={userId} // Asegúrate de pasar el userId al modal aquí
+      />
     </div>
   );
 };

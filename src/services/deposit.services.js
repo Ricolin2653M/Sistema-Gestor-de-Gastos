@@ -3,6 +3,7 @@ import { ENV } from "../utils/constants";
 
 // Función para crear un nuevo depósito
 const createDeposit = async (token, depositData) => {
+    //console.log("Datos que se enviarán:", depositData);
     try {
         const url = `${ENV.API_URL}/${ENV.ENDPOINTS.DEPOSIT}`;
         const response = await authFetch(url, {
