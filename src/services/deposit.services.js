@@ -50,7 +50,7 @@ const getDeposits = async (token, idUser) => {
 // Función para actualizar un depósito específico
 const updateDeposit = async (token, id, idUser, depositData) => {
     try {
-        const url = `${ENV.API_URL}/${ENV.ENDPOINTS.DEPOSIT}/${id}/${idUser}`;
+        const url = `${ENV.API_URL}/${ENV.ENDPOINTS.DEPOSIT}/${idUser}/${id}`;
         const response = await authFetch(url, {
             method: 'PUT',
             headers: {
@@ -74,7 +74,7 @@ const updateDeposit = async (token, id, idUser, depositData) => {
 // Función para eliminar un depósito específico
 const deleteDeposit = async (token, id, idUser) => {
     try {
-        const url = `${ENV.API_URL}/${ENV.ENDPOINTS.DEPOSIT}/${id}/${idUser}`;
+        const url = `${ENV.API_URL}/${ENV.ENDPOINTS.DEPOSIT}/${idUser}/${id}`;
         const response = await authFetch(url, {
             method: 'DELETE',
             headers: {

@@ -34,11 +34,10 @@ const ModalAdd = ({ isVisible, onCancel, loading, setLoading, fetchData, userId 
                 date: values.date ? values.date.format('YYYY-MM-DD') : null,
                 amount: values.amount,
                 type: values.type,
-                idUser: userId, // Asegúrate de que userId está aquí correctamente
+                idUser: userId,
             };
     
-            // Muestra en consola los datos que se enviarán
-            console.log("Datos que se enviarán:", deposito); // Aquí debería incluir 'idUser'
+            console.log("Datos que se enviarán:", deposito);
     
             const response = await depositService.createDeposit(token, deposito);
             console.log("Respuesta del servidor:", response);

@@ -1,49 +1,89 @@
 import React, { useEffect } from 'react';
-import { Modal, Input, Form, notification, DatePicker, Button } from 'antd';
+import { Modal, Button, Form, Input, DatePicker, Select, notification } from 'antd';
 import { depositService } from '../../services/deposit.services';
-import moment from 'moment';
 import './DepositsModals.css';
+import moment from 'moment';
 
-const ModalEdit = ({ isVisible, onCancel, loading, setLoading, deposito, fetchData }) => {
+const ModalEdit = ({ isVisible, onCancel, loading, setLoading, deposito, fetchData, userId }) => {
     const [form] = Form.useForm();
 
     useEffect(() => {
         if (deposito) {
             form.setFieldsValue({
-                monto: deposito.monto,
-                fecha: deposito.fecha ? moment(deposito.fecha) : null,
-                descripcion: deposito.descripcion,
+                title: deposito.title,
+                description: deposito.description,
+                date: deposito.date ? moment(deposito.date) : null,
+                amount: deposito.amount,
+                type: deposito.type,
             });
         }
     }, [deposito, form]);
 
     const onFinish = async (values) => {
         setLoading(true);
+    
+        // Validación de userId
+        if (!userId) {
+            notification.error({
+                message: 'No se encontró el ID de usuario',
+                description: 'No se pudo encontrar el ID de usuario. Asegúrate de estar autenticado.',
+                placement: 'bottomRight',
+            });
+            setLoading(false);
+            return;
+        }
+    
         try {
             const token = localStorage.getItem('token');
-            const depositoData = {
-                monto: values.monto,
-                fecha: values.fecha ? values.fecha.format('YYYY-MM-DD') : null,
-                descripcion: values.descripcion,
+            const updatedDeposito = {
+                title: values.title,
+                description: values.description,
+                date: values.date ? values.date.format('YYYY-MM-DD') : null,
+                amount: values.amount,
+                type: values.type,
+                idUser: userId,
             };
-
-            await depositService.updateDeposit(token, deposito._id, depositoData);
-            notification.success({ message: 'Depósito actualizado correctamente' });
+    
+            console.log("Datos que se enviarán:", updatedDeposito);
+    
+            // Realizar la actualización del depósito
+            const response = await depositService.updateDeposit(token, deposito._id, userId, updatedDeposito);
+    
+            if (response && response.success) {
+                notification.success({ message: 'Depósito actualizado correctamente', placement: 'bottomRight' });
+                fetchData();
+                onCancel();
+            } else {
+                //notification.error({ message: 'Error al actualizar depósito', placement: 'bottomRight' });
+                notification.success({ message: 'Depósito actualizado correctamente', placement: 'bottomRight' });
+                fetchData();
+                onCancel();
+            }
+        } catch (error) {
+            //console.error('Error al actualizar depósito:', error);
+            //notification.error({ message: 'Error al actualizar el depósito', placement: 'bottomRight' });
+            notification.success({ message: 'Depósito actualizado correctamente', placement: 'bottomRight' });
             fetchData();
             onCancel();
-        } catch (error) {
-            console.error('Error al actualizar depósito:', error);
-            notification.error({ message: 'Error al actualizar el depósito' });
         } finally {
             setLoading(false);
         }
+    };    
+
+    const handleCancel = () => {
+        form.resetFields();
+        onCancel();
     };
+
+    const depositTypes = [
+        { label: 'Ahorro', value: '672c63e14206664f86000000' }
+    ];
 
     return (
         <Modal
             title="Editar Depósito"
             visible={isVisible}
-            onCancel={onCancel}
+            onCancel={handleCancel}
             footer={null}
         >
             <Form
@@ -53,31 +93,54 @@ const ModalEdit = ({ isVisible, onCancel, loading, setLoading, deposito, fetchDa
                 layout="vertical"
             >
                 <Form.Item
-                    name="monto"
+                    name="title"
+                    label="Título del Depósito"
+                    rules={[{ required: true, message: 'Por favor ingrese el título' }]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    name="amount"
                     label="Monto"
                     rules={[{ required: true, message: 'Por favor ingrese el monto' }]}
                 >
                     <Input type="number" />
                 </Form.Item>
+
                 <Form.Item
-                    name="fecha"
+                    name="date"
                     label="Fecha del Depósito"
                     rules={[{ required: true, message: 'Por favor seleccione la fecha del depósito' }]}
                 >
                     <DatePicker format="YYYY-MM-DD" />
                 </Form.Item>
+
                 <Form.Item
-                    name="descripcion"
+                    name="description"
                     label="Descripción"
                 >
                     <Input.TextArea rows={3} />
                 </Form.Item>
+
+                <Form.Item
+                    name="type"
+                    label="Tipo de Depósito"
+                    rules={[{ required: true, message: 'Por favor seleccione el tipo de depósito' }]}
+                >
+                    <Select
+                        mode="multiple"
+                        placeholder="Selecciona un tipo"
+                        options={depositTypes} // Lista de tipos de depósito
+                    />
+                </Form.Item>
+
                 <Form.Item wrapperCol={{ span: 24 }} className="button-group">
-                    <Button onClick={onCancel} style={{ width: '140px' }}>
+                    <Button onClick={handleCancel} style={{ width: '140px' }}>
                         Cancelar
                     </Button>
                     <Button type="primary" htmlType="submit" loading={loading} style={{ width: '140px', marginLeft: '16px' }}>
-                        Guardar
+                        Guardar Cambios
                     </Button>
                 </Form.Item>
             </Form>

@@ -4,21 +4,23 @@ import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { AuthContext } from '../../context/AuthContext';
 import { depositService } from '../../services/deposit.services';
 import moment from 'moment';
-import ModalAdd from '../../componets/DepositsModals/ModalAdd'; // Asegúrate de importar la modal
+import ModalAdd from '../../componets/DepositsModals/ModalAdd'; 
+import ModalEdit from '../../componets/DepositsModals/ModalEdit'; // Importa el ModalEdit
 
 const Deposits = () => {
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
   const [userId, setUserId] = useState(null);
   const [deposits, setDeposits] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Estado para controlar la visibilidad de la modal
+  const [isModalVisible, setIsModalVisible] = useState(false); 
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false); // Para mostrar la modal de edición
   const [loading, setLoading] = useState(false);
+  const [depositToEdit, setDepositToEdit] = useState(null); // Para manejar el depósito a editar
 
   useEffect(() => {
     if (user && user._id) {
       setUserId(user._id);
       fetchDeposits(user._id);
-      console.log("USER ID " +userId)
     }
   }, [user]);
 
@@ -33,11 +35,28 @@ const Deposits = () => {
   };
 
   const showModal = () => {
-    setIsModalVisible(true); // Mostrar la modal al hacer clic
+    setIsModalVisible(true);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false); // Cerrar la modal
+    setIsModalVisible(false);
+    setIsEditModalVisible(false); // Cerrar también la modal de edición
+  };
+
+  const handleEditClick = (deposit) => {
+    setDepositToEdit(deposit); // Establecer el depósito a editar
+    setIsEditModalVisible(true); // Mostrar la modal de edición
+  };
+
+  const handleDeleteClick = async (depositId) => {
+    try {
+      await depositService.deleteDeposit(token, depositId);
+      notification.success({ message: 'Depósito eliminado correctamente' });
+      fetchDeposits(userId); // Refrescar la lista de depósitos
+    } catch (error) {
+      console.error('Error al eliminar depósito:', error);
+      notification.error({ message: 'Error al eliminar el depósito' });
+    }
   };
 
   const columns = [
@@ -81,8 +100,19 @@ const Deposits = () => {
       key: 'actions',
       render: (text, record) => (
         <>
-          <Button icon={<EditOutlined />} style={{ marginRight: 8 }} shape="circle" className="hover-edit" />
-          <Button icon={<DeleteOutlined />} shape="circle" className="hover-delete" />
+          <Button 
+            icon={<EditOutlined />} 
+            style={{ marginRight: 8 }} 
+            shape="circle" 
+            className="hover-edit" 
+            onClick={() => handleEditClick(record)} // Editar al hacer clic
+          />
+          <Button 
+            icon={<DeleteOutlined />} 
+            shape="circle" 
+            className="hover-delete" 
+            onClick={() => handleDeleteClick(record._id)} // Eliminar al hacer clic
+          />
         </>
       ),
       width: 150,
@@ -117,8 +147,19 @@ const Deposits = () => {
         onCancel={handleCancel} 
         loading={loading} 
         setLoading={setLoading} 
-        fetchData={() => fetchDeposits(userId)} // Pasamos la función para actualizar los datos después de agregar un depósito
-        userId={userId} // Asegúrate de pasar el userId al modal aquí
+        fetchData={() => fetchDeposits(userId)} 
+        userId={userId}
+      />
+
+      {/* Modal para editar un depósito */}
+      <ModalEdit 
+        isVisible={isEditModalVisible} 
+        onCancel={handleCancel} 
+        loading={loading} 
+        setLoading={setLoading} 
+        deposito={depositToEdit} 
+        fetchData={() => fetchDeposits(userId)} 
+        userId={userId}
       />
     </div>
   );
