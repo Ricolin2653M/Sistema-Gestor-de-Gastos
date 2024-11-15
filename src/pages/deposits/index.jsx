@@ -1,39 +1,76 @@
-import React from 'react';
-import { Button, Table } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, notification, Table } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import "../deposits/depositos.css";
+import { AuthContext } from '../../context/AuthContext';
+import { depositService } from '../../services/deposit.services';
+import moment from 'moment';
+import ModalAdd from '../../componets/DepositsModals/ModalAdd'; 
+import ModalEdit from '../../componets/DepositsModals/ModalEdit';
+import ModalDelete from '../../componets/DepositsModals/ModalDelete';
 
 const Deposits = () => {
-  const data = [
-    {
-      key: '1',
-      type: 'Deposit',
-      description: 'Deposito de pago en mi trabajo',
-      date: '2024-10-10',
-      amount: '$10,000.00 MXN',
-    },
-    {
-      key: '2',
-      type: 'Deposit',
-      description: 'Deposito de pago en mi trabajo',
-      date: '2024-10-10',
-      amount: '$10,000.00 MXN',
-    },
-    {
-      key: '3',
-      type: 'Deposit',
-      description: 'Deposito de pago en mi trabajo',
-      date: '2024-10-10',
-      amount: '$10,000.00 MXN',
-    },
-  ];
+  const { user } = useContext(AuthContext);
+  const token = localStorage.getItem('token');
+  const [userId, setUserId] = useState(null);
+  const [deposits, setDeposits] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false); 
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [depositToEdit, setDepositToEdit] = useState(null);
+  const [depositToDelete, setDepositToDelete] = useState(null);
 
+  useEffect(() => {
+    if (user && user._id) {
+      setUserId(user._id);
+      fetchDeposits(user._id);
+    }
+  }, [user]);
+
+  const fetchDeposits = async (userId) => {
+    try {
+      const depositsData = await depositService.getDeposits(token, userId);
+      setDeposits(depositsData);
+    } catch (error) {
+      console.error('Error al obtener los depósitos:', error);
+      notification.error({ message: 'Error al obtener los depósitos' });
+    }
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setIsEditModalVisible(false);
+    setIsDeleteModalVisible(false);
+  };
+
+  const handleEditClick = (deposit) => {
+    setDepositToEdit(deposit);
+    setIsEditModalVisible(true);
+  };
+
+  const handleDeleteClick = (deposit) => {
+    setDepositToDelete(deposit);
+    setIsDeleteModalVisible(true);
+  };
+  
   const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+      width: 200,
+    },
     {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      render: () => <Button shape="round">Deposit</Button>,
+      render: (type) => (
+        type && type.length > 0 ? type.join(", ") : "No Type"
+      ),
       width: 150,
       className: 'ant-table-column-type', // Clase para ocultar en móviles
     },
@@ -48,6 +85,7 @@ const Deposits = () => {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
+      render: (date) => moment(date).format('YYYY-MM-DD'),
       width: 200,
     },
     {
@@ -59,10 +97,21 @@ const Deposits = () => {
     {
       title: 'Actions',
       key: 'actions',
-      render: () => (
+      render: (text, record) => (
         <>
-          <Button icon={<EditOutlined />} style={{ marginRight: 8 }} shape="circle" className="hover-edit"/>
-          <Button icon={<DeleteOutlined />} shape="circle" className="hover-delete"/>
+          <Button 
+            icon={<EditOutlined />} 
+            style={{ marginRight: 8 }} 
+            shape="circle" 
+            className="hover-edit" 
+            onClick={() => handleEditClick(record)} // Editar al hacer clic
+          />
+          <Button 
+            icon={<DeleteOutlined />} 
+            shape="circle" 
+            className="hover-delete" 
+            onClick={() => handleDeleteClick(record)} // Eliminar al hacer clic
+          />
         </>
       ),
       width: 150,
@@ -71,13 +120,13 @@ const Deposits = () => {
   ];
 
   return (
-    <div className="deposits-container">
+    <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 className="deposits-titulo">Deposits</h1>
-        <button className="add-transaction-btn">
-          <p className="add-transaction-name">Add transaction</p>
+        <button className="add-transaction-btn" onClick={showModal}>
+          <p className="add-transaction-name">Add deposit</p>
           <span className="icon">
-            <PlusOutlined /> 
+            <PlusOutlined />
           </span>
         </button>
       </div>
@@ -85,11 +134,43 @@ const Deposits = () => {
       <div className="table-container">
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={deposits}
+          rowKey="_id"
           pagination={{ pageSize: 5 }}
           scroll={{ y: 300 }}
         />
       </div>
+
+      {/* Modal para agregar nuevo depósito */}
+      <ModalAdd 
+        isVisible={isModalVisible} 
+        onCancel={handleCancel} 
+        loading={loading} 
+        setLoading={setLoading} 
+        fetchData={() => fetchDeposits(userId)} 
+        userId={userId}
+      />
+
+      {/* Modal para editar un depósito */}
+      <ModalEdit 
+        isVisible={isEditModalVisible} 
+        onCancel={handleCancel} 
+        loading={loading} 
+        setLoading={setLoading} 
+        deposito={depositToEdit} 
+        fetchData={() => fetchDeposits(userId)} 
+        userId={userId}
+      />
+      {/* Modal para eliminar un depósito */}
+      <ModalDelete 
+        isVisible={isDeleteModalVisible} 
+        onCancel={handleCancel} 
+        deposito={depositToDelete} 
+        loading={loading} 
+        setLoading={setLoading} 
+        fetchData={() => fetchDeposits(userId)} 
+        userId={userId}
+      />
     </div>
   );
 };

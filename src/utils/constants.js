@@ -3,7 +3,8 @@ export const ENV = {
     ENDPOINTS: {
         REGISTER: 'api/auth/signup',
         LOGIN: 'api/auth/signin',
-        USER: 'api/users'
+        USER: 'api/users',
+        DEPOSIT: 'api/deposit'
     },
     STORAGE: {
         TOKEN: 'token',
