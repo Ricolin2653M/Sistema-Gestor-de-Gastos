@@ -4,7 +4,8 @@ export const ENV = {
         REGISTER: 'api/auth/signup',
         LOGIN: 'api/auth/signin',
         USER: 'api/users',
-        DEPOSIT: 'api/deposit'
+        DEPOSIT: 'api/deposit',
+        PAYMENT: 'api/expense'
     },
     STORAGE: {
         TOKEN: 'token',

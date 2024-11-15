@@ -1,0 +1,11 @@
+.date-picker-item {
+    margin-bottom: 24px;
+}
+
+.button-group {
+    text-align: center;
+}
+
+.button-group button {
+    width: 140px;
+}
