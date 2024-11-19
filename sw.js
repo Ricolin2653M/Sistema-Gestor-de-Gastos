@@ -1,9 +1,8 @@
-//Script  firebase
-importScripts('/public/firebase-messaging-sw.js')
+// Script Firebase
+importScripts('/public/firebase-messaging-sw.js');
 
-
-const CACHE_STATIC = 'static-v1'; // App Shell
-const CACHE_DYNAMIC = 'dynamic-v1'; // Recursos dinámicos que cambian
+const CACHE_STATIC = 'static-v3'; // App Shell
+const CACHE_DYNAMIC = 'dynamic-v2'; // Recursos dinámicos que cambian
 const CACHE_INMUTABLE = 'inmutable-v1'; // Recursos de terceros que no cambian
 
 const STATIC_FILES = [
@@ -21,6 +20,13 @@ const INMUTABLE_FILES = [
     'https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics-compat.js'
 ];
 
+const EXCLUDED_PATHS = [
+    '/src/pages/login/', 
+    '/src/pages/register/',
+    '/node_modules/'
+]; 
+
+// Función para limpiar el caché dinámico
 const limpiarCache = (cacheName, maxItems) => {
     caches.open(cacheName).then(cache => {
         cache.keys().then(keys => {
@@ -52,48 +58,62 @@ self.addEventListener('activate', event => {
     event.waitUntil(cleanOldCaches);
 });
 
-// Cache Network Fallback 
+// Fetch: Implementar estrategias de caché
 self.addEventListener('fetch', event => {
-    const requestUrl = new URL(event.request.url);
+    const url = new URL(event.request.url);
 
-    // Excluir rutas de login y registro de la caché dinámica
-    if (requestUrl.pathname.includes('login') || requestUrl.pathname.includes('register')) {
-        return;
+    // Excluir rutas específicas del caché
+    if (EXCLUDED_PATHS.some(path => url.pathname.startsWith(path))) {
+        return event.respondWith(fetch(event.request));
     }
 
-    if (STATIC_FILES.includes(requestUrl.pathname)) {
-        event.respondWith(
-            caches.match(event.request).then(cachedResponse => {
-                return cachedResponse || fetch(event.request).then(networkResponse => {
-                    caches.open(CACHE_STATIC).then(cache => cache.put(event.request, networkResponse.clone()));
+    // Estrategia "Network First" para rutas API
+    if (url.pathname.startsWith('/api/')) {
+        const networkFirstResponse = fetch(event.request)
+            .then(networkResponse => {
+                if (!networkResponse || networkResponse.status !== 200) {
+                    return networkResponse;
+                }
+
+                // Actualizar el caché dinámico
+                return caches.open(CACHE_DYNAMIC).then(cache => {
+                    cache.put(event.request, networkResponse.clone()).catch(() => {});
                     return networkResponse;
                 });
             })
-        );
+            .catch(() => {
+                return caches.match(event.request);
+            });
+
+        event.respondWith(networkFirstResponse);
         return;
     }
 
-    // Cache Network Race
-    if (!STATIC_FILES.includes(requestUrl.pathname)) {
-        const raceStrategy = new Promise((resolve, reject) => {
-            let fetchFailed = false;
+    // Estrategia "Cache First" para otras rutas
+    const respuesta = caches.match(event.request).then(response => {
+        if (response) {
+            return response; 
+        }
 
-            const failOnce = () => {
-                if (fetchFailed) reject('No se encontró respuesta');
-                else fetchFailed = true;
-            };
+        // Fetch desde la red y guardar en el caché dinámico
+        return fetch(event.request)
+            .then(networkResponse => {
+                if (!networkResponse || networkResponse.status !== 200 || networkResponse.status !== 201) {
+                    return networkResponse;
+                }
 
-            fetch(event.request).then(networkResponse => {
-                if (networkResponse.ok) resolve(networkResponse);
-                else failOnce();
-            }).catch(failOnce);
+                // Guardar en caché dinámico
+                return caches.open(CACHE_DYNAMIC).then(cache => {
+                    cache.put(event.request, networkResponse.clone()).catch(() => {});
+                    limpiarCache(CACHE_DYNAMIC, 50); // Limitar a 50 elementos
+                    return networkResponse;
+                });
+            })
+            .catch(() => {
+                // Intentar responder desde el caché en caso de error
+                return caches.match(event.request);
+            });
+    });
 
-            caches.match(event.request).then(cacheResponse => {
-                if (cacheResponse) resolve(cacheResponse);
-                else failOnce();
-            }).catch(failOnce);
-        });
-
-        event.respondWith(raceStrategy);
-    }
+    event.respondWith(respuesta);
 });

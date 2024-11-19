@@ -24,7 +24,7 @@ export const authFetch = async (url, params) => {
             try{
                 return await fetch(url, options)
             } catch (error) {
-                console.log(error)
+                console.log("Error",error)
             }
         }
         //const response = tokenExpired(token);
