@@ -8,6 +8,12 @@ import ModalAdd from '../../componets/ExpensesModals/ModalAdd';
 import ModalEdit from '../../componets/ExpensesModals/ModalEdit';
 import ModalDelete from '../../componets/ExpensesModals/ModalDelete';
 
+//Imports push notifications
+import { getToken, onMessage } from 'firebase/messaging';
+import { messaging } from '../../firebase';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
 const Expenses = () => {
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
@@ -20,11 +26,56 @@ const Expenses = () => {
   const [expenseToEdit, setexpenseToEdit] = useState(null);
   const [expenseToDelete, setexpenseToDelete] = useState(null);
 
+
+  const getTokenNotification = async () => {
+    const token = await getToken(messaging, {
+        vapidKey: 'BFm1JIsWvokI9-0Y1HAX9QxPH0Vmvcph9U5jGYZkq2OMDc8S8sHrNAqGzTfxNL8D4KTETCIw39F9t7po-f9AoLM'
+    }).catch((err) => console.log('No se pudo obtener el token', err))
+
+    if (token) {
+        console.log('Token si: ', token)
+    }
+    if (!token) {
+        console.log('No se pudo obtener el token')
+    }
+  };
+
+  const notificarme = () => {
+      if (!window.Notification) {
+          console.log('Este navegador no soporta notificaciones');
+          return;
+      }
+      if (Notification.permission === 'granted') {
+          getTokenNotification(); //Obtener y mostrar el token en la consola
+      }
+      else if(Notification.permission !== 'denied' || Notification.permission === 'default'){
+          Notification.requestPermission((permission) => {
+              console.log(permission)
+              if (permission === 'granted') {
+                  getTokenNotification(); //Obtener y mostrar el token en la consola
+              }
+          });
+      }
+  };
+  notificarme();
+
+
+
   useEffect(() => {
     if (user && user._id) {
       setUserId(user._id);
       fetchDeposits(user._id);
+
+      getTokenNotification()
+        onMessage(messaging, message => {
+            console.log('onMessage: ', message)
+            toast( message.notification.title)
+            console.log(message.notification.title)
+    })
+
     }
+
+    
   }, [user]);
 
   const fetchDeposits = async (userId) => {
@@ -119,6 +170,7 @@ const Expenses = () => {
 
   return (
     <div>
+      <ToastContainer />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 className="deposits-titulo">Payments</h1>
         <button className="add-transaction-btn" onClick={showModal}>

@@ -5,6 +5,9 @@ import { useAuth } from '../../hooks/useAuth';
 import authService from '../../services/auth.service.js';
 import "./Login.css";
 
+//Imports firebase
+import { getAuth, signInAnonymously } from 'firebase/auth';
+
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -19,6 +22,7 @@ const Login = () => {
       if (response && response.data) {
         localStorage.setItem('token', response.data.token);
         login(response.data.token);
+        signInAnonymously(getAuth()).then((usuario) => console.log(usuario))
         navigate('/');
       } else {
         console.error('Error en el inicio de sesión: Respuesta inesperada');

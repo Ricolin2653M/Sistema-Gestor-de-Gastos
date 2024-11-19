@@ -1,3 +1,7 @@
+//Script  firebase
+importScripts('/public/firebase-messaging-sw.js')
+
+
 const CACHE_STATIC = 'static-v1'; // App Shell
 const CACHE_DYNAMIC = 'dynamic-v1'; // Recursos dinámicos que cambian
 const CACHE_INMUTABLE = 'inmutable-v1'; // Recursos de terceros que no cambian
@@ -12,7 +16,9 @@ const STATIC_FILES = [
 ];
 
 const INMUTABLE_FILES = [
-    'https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Roboto:wght@100&display=swap'
+    'https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Roboto:wght@100&display=swap',
+    'https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics-compat.js'
 ];
 
 const limpiarCache = (cacheName, maxItems) => {
