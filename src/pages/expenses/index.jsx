@@ -14,7 +14,7 @@ import { messaging } from '../../firebase';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
-const Expenses = () => {
+const Expenses = ({ showAddButton }) => {  // Recibimos la propiedad showAddButton
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
   const [userId, setUserId] = useState(null);
@@ -25,7 +25,6 @@ const Expenses = () => {
   const [loading, setLoading] = useState(false);
   const [expenseToEdit, setexpenseToEdit] = useState(null);
   const [expenseToDelete, setexpenseToDelete] = useState(null);
-
 
   const getTokenNotification = async () => {
     const token = await getToken(messaging, {
@@ -59,8 +58,6 @@ const Expenses = () => {
   };
   notificarme();
 
-
-
   useEffect(() => {
     if (user && user._id) {
       setUserId(user._id);
@@ -74,8 +71,6 @@ const Expenses = () => {
     })
 
     }
-
-    
   }, [user]);
 
   const fetchDeposits = async (userId) => {
@@ -173,12 +168,16 @@ const Expenses = () => {
       <ToastContainer />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 className="deposits-titulo">Payments</h1>
-        <button className="add-transaction-btn" onClick={showModal}>
-          <p className="add-transaction-name">Add payments</p>
-          <span className="icon">
-            <PlusOutlined />
-          </span>
-        </button>
+
+        {/* Mostrar el botón solo si showAddButton es verdadero */}
+        {showAddButton && (
+          <button className="add-transaction-btn" onClick={showModal}>
+            <p className="add-transaction-name">Add payments</p>
+            <span className="icon">
+              <PlusOutlined />
+            </span>
+          </button>
+        )}
       </div>
 
       <div className="table-container">
