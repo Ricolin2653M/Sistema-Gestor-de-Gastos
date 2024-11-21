@@ -102,13 +102,13 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
 
   const columns = [
     {
-      title: 'Title',
+      title: 'Titulo',
       dataIndex: 'title',
       key: 'title',
       width: 200,
     },
     {
-      title: 'Type',
+      title: 'Tipo',
       dataIndex: 'type',
       key: 'type',
       render: (type) => (
@@ -118,27 +118,27 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
       className: 'ant-table-column-type',
     },
     {
-      title: 'Description',
+      title: 'Descripción',
       dataIndex: 'description',
       key: 'description',
       width: 300,
       ellipsis: true,
     },
     {
-      title: 'Date',
+      title: 'Fecha',
       dataIndex: 'date',
       key: 'date',
       render: (date) => moment(date).format('YYYY-MM-DD'),
       width: 200,
     },
     {
-      title: 'Amount',
+      title: 'Cantidad',
       dataIndex: 'amount',
       key: 'amount',
       width: 200,
     },
     {
-      title: 'Actions',
+      title: 'Acciones',
       key: 'actions',
       render: (text, record) => (
         <>
@@ -166,10 +166,10 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
     <div>
       <ToastContainer />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 className="deposits-titulo">Deposits</h1>
+        <h1 className="deposits-titulo">Depositos</h1>
         {showAddButton && (
           <button className="add-transaction-btn" onClick={showModal}>
-            <p className="add-transaction-name">Add deposit</p>
+            <p className="add-transaction-name">Agregar deposito</p>
             <span className="icon">
               <PlusOutlined />
             </span>

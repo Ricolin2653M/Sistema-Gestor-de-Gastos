@@ -9,7 +9,7 @@ const Home = () => {
       <div className="table-section">
         {/* Título para la tabla de Deposits */}
         <div className="table-wrapper">
-          <h2>Deposits</h2>
+       
           <div className="table-wrapper">
           <Deposits showAddButton={false} /> {/* Oculta el botón de agregar */}
         </div>

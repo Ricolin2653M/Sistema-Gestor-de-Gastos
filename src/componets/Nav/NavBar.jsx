@@ -38,13 +38,13 @@ const NavBar = () => {
         {/* Navigation Links */}
         <div className={`nav-link-container ${isMobileMenuOpen ? 'open' : ''}`}>
           <Link className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/" onClick={toggleMobileMenu}>
-            Home
+            Inicio 
           </Link>
           <Link className={`nav-link ${location.pathname === '/deposits' ? 'active' : ''}`} to="/deposits" onClick={toggleMobileMenu}>
-            Deposits
+            Depositos
           </Link>
           <Link className={`nav-link ${location.pathname === '/expenses' ? 'active' : ''}`} to="/expenses" onClick={toggleMobileMenu}>
-            Expenses
+          Gastos
           </Link>
         </div>
 
@@ -56,11 +56,11 @@ const NavBar = () => {
 
           {!user ? (
             <Link className="nav-link login-btn" to="/login" onClick={toggleMobileMenu}>
-              Login
+              Acceso
             </Link>
           ) : (
             <button className="logout-btn" onClick={() => { logout(); toggleMobileMenu(); }}>
-              Logout
+            Cerrar sesión
             </button>
           )}
         </div>
