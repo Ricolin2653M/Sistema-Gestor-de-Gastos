@@ -119,11 +119,11 @@ const Deposits = () => {
       dataIndex: 'type',
       key: 'type',
       render: (type) => (
-        type && type.length > 0 ? type.join(", ") : "No Type"
+        type ? type : "No Type"
       ),
       width: 150,
       className: 'ant-table-column-type', // Clase para ocultar en móviles
-    },
+    },    
     {
       title: 'Description',
       dataIndex: 'description',
