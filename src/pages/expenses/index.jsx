@@ -164,21 +164,19 @@ const Expenses = ({ showAddButton }) => {  // Recibimos la propiedad showAddButt
   ];
 
   return (
-    <div>
-      <ToastContainer />
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 className="deposits-titulo">Payments</h1>
-
-        {/* Mostrar el botón solo si showAddButton es verdadero */}
-        {showAddButton && (
-          <button className="add-transaction-btn" onClick={showModal}>
-            <p className="add-transaction-name">Add payments</p>
-            <span className="icon">
-              <PlusOutlined />
-            </span>
-          </button>
-        )}
-      </div>
+     <div>
+    <ToastContainer />
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <h1 className="deposits-titulo">Deposits</h1>
+      {showAddButton && (
+        <button className="add-transaction-btn" onClick={showModal}>
+          <p className="add-transaction-name">Add deposit</p>
+          <span className="icon">
+            <PlusOutlined />
+          </span>
+        </button>
+      )}
+    </div>
 
       <div className="table-container">
         <Table
