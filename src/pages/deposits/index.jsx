@@ -80,6 +80,7 @@ const Deposits = () => {
   const fetchDeposits = async (userId) => {
     try {
       const depositsData = await depositService.getDeposits(token, userId);
+      console.log("Depósitos obtenidos: ", depositsData);
       setDeposits(depositsData);
     } catch (error) {
       console.error('Error al obtener los depósitos:', error);

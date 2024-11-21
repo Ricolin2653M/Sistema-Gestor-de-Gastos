@@ -1,9 +1,11 @@
-// Script Firebase
 importScripts('/public/firebase-messaging-sw.js');
+importScripts('https://cdn.jsdelivr.net/npm/pouchdb@9.0.0/dist/pouchdb.min.js');
+importScripts('js/sw-bd.js');
+importScripts('js/sw-utils.js');
 
-const CACHE_STATIC = 'static-v3'; // App Shell
-const CACHE_DYNAMIC = 'dynamic-v2'; // Recursos dinámicos que cambian
-const CACHE_INMUTABLE = 'inmutable-v1'; // Recursos de terceros que no cambian
+const CACHE_STATIC = 'static-v3';
+const CACHE_DYNAMIC = 'dynamic-v2';
+const CACHE_INMUTABLE = 'inmutable-v1';
 
 const STATIC_FILES = [
     '/',
@@ -17,14 +19,11 @@ const STATIC_FILES = [
 const INMUTABLE_FILES = [
     'https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Roboto:wght@100&display=swap',
     'https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js',
-    'https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics-compat.js'
+    'https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics-compat.js',
+    'https://cdn.jsdelivr.net/npm/pouchdb@9.0.0/dist/pouchdb.min.js'
 ];
 
-const EXCLUDED_PATHS = [
-    '/src/pages/login/', 
-    '/src/pages/register/',
-    '/node_modules/'
-]; 
+const EXCLUDED_PATHS = ['/src/pages/login/', '/src/pages/register/', '/node_modules/'];
 
 // Función para limpiar el caché dinámico
 const limpiarCache = (cacheName, maxItems) => {
@@ -37,6 +36,52 @@ const limpiarCache = (cacheName, maxItems) => {
     });
 };
 
+// Manejo de API de Notas PARA INDEXDB
+const manejoApiNotass = (cacheName, req) => {
+    if (req.clone().method === 'POST') {
+        if (self.registration.sync) {
+            return req.clone().text().then(body => {
+                const bodyObj = JSON.parse(body);
+                return guardarNota(bodyObj);
+            });
+        } else {
+            return fetch(req);
+        }
+    } else {
+        return fetch(req).then(resp => {
+            if (resp.ok) {
+                actualizarCacheDinamico(cacheName, req, resp.clone());
+                return resp.clone();
+            } else {
+                return caches.match(req);
+            }
+        }).catch(() => caches.match(req));
+    }
+};
+
+//Manejo de API de Expenses  para indexDB
+const manejoApiExpensess = (cacheName, req) => {
+    if (req.clone().method === 'POST') {
+        if (self.registration.sync) {
+            return req.clone().text().then(body => {
+                const bodyObj = JSON.parse(body);
+                return guardarExpense(bodyObj);
+            });
+        } else {
+            return fetch(req);
+        }
+    } else {
+        return fetch(req).then(resp => {
+            if (resp.ok) {
+                actualizarCacheDinamico(cacheName, req, resp.clone());
+                return resp.clone();
+            } else {
+                return caches.match(req);
+            }
+        }).catch(() => caches.match(req));
+    }
+};
+
 self.addEventListener('install', event => {
     const cacheStaticPromise = caches.open(CACHE_STATIC).then(cache => cache.addAll(STATIC_FILES));
     const cacheInmutablePromise = caches.open(CACHE_INMUTABLE).then(cache => cache.addAll(INMUTABLE_FILES));
@@ -44,7 +89,6 @@ self.addEventListener('install', event => {
     event.waitUntil(Promise.all([cacheStaticPromise, cacheInmutablePromise]));
 });
 
-// Activación: Limpiar versiones antiguas de cachés
 self.addEventListener('activate', event => {
     const cleanOldCaches = caches.keys().then(keys => {
         return Promise.all(
@@ -58,62 +102,45 @@ self.addEventListener('activate', event => {
     event.waitUntil(cleanOldCaches);
 });
 
-// Fetch: Implementar estrategias de caché
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 
-    // Excluir rutas específicas del caché
+    //funciones para indexdb
+            if (url.href.includes('https://aplicacion-sgp.vercel.app/api/deposit')) {
+                event.respondWith(manejoApiNotas(CACHE_DYNAMIC, event.request));
+                return;
+            }
+
+            if (url.href.includes('https://aplicacion-sgp.vercel.app/api/expense')) {
+                event.respondWith(manejoApiExpenses(CACHE_DYNAMIC, event.request));
+                return;
+            }//fin
+
     if (EXCLUDED_PATHS.some(path => url.pathname.startsWith(path))) {
         return event.respondWith(fetch(event.request));
     }
 
-    // Estrategia "Network First" para rutas API
-    if (url.pathname.startsWith('/api/')) {
-        const networkFirstResponse = fetch(event.request)
-            .then(networkResponse => {
-                if (!networkResponse || networkResponse.status !== 200) {
-                    return networkResponse;
-                }
-
-                // Actualizar el caché dinámico
-                return caches.open(CACHE_DYNAMIC).then(cache => {
-                    cache.put(event.request, networkResponse.clone()).catch(() => {});
-                    return networkResponse;
-                });
-            })
-            .catch(() => {
-                return caches.match(event.request);
+    const networkFirstResponse = fetch(event.request)
+        .then(networkResponse => {
+            if (!networkResponse || networkResponse.status !== 200) {
+                return networkResponse;
+            }
+            return caches.open(CACHE_DYNAMIC).then(cache => {
+                cache.put(event.request, networkResponse.clone()).catch(() => {});
+                return networkResponse;
             });
+        })
+        .catch(() => caches.match(event.request));
 
-        event.respondWith(networkFirstResponse);
-        return;
+    event.respondWith(networkFirstResponse);
+});
+
+self.addEventListener('sync', event => {
+    if (event.tag === 'nueva-nota') {
+        event.waitUntil(postearNotas());
     }
 
-    // Estrategia "Cache First" para otras rutas
-    const respuesta = caches.match(event.request).then(response => {
-        if (response) {
-            return response; 
-        }
-
-        // Fetch desde la red y guardar en el caché dinámico
-        return fetch(event.request)
-            .then(networkResponse => {
-                if (!networkResponse || networkResponse.status !== 200 || networkResponse.status !== 201) {
-                    return networkResponse;
-                }
-
-                // Guardar en caché dinámico
-                return caches.open(CACHE_DYNAMIC).then(cache => {
-                    cache.put(event.request, networkResponse.clone()).catch(() => {});
-                    limpiarCache(CACHE_DYNAMIC, 50); // Limitar a 50 elementos
-                    return networkResponse;
-                });
-            })
-            .catch(() => {
-                // Intentar responder desde el caché en caso de error
-                return caches.match(event.request);
-            });
-    });
-
-    event.respondWith(respuesta);
+    if (event.tag === 'nueva-expense') {
+        event.waitUntil(postearExpenses());
+    }
 });
