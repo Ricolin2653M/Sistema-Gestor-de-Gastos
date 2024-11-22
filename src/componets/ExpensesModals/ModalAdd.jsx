@@ -126,7 +126,7 @@ const ModalAdd = ({ isVisible, onCancel, loading, setLoading, fetchData, userId 
                     <Select
                         mode="multiple"
                         placeholder="Selecciona un tipo"
-                        options={depositTypes} // Lista de tipos de gastos
+                        options={expenseTypes} // Lista de tipos de gastos
                     />
                 </Form.Item>
 
