@@ -3,7 +3,7 @@ import { Form, Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../hooks/useAuth';
 import authService from '../../services/auth.service.js';
-import "./Login.css";
+import "./login.css";
 
 //Imports firebase
 import { getAuth, signInAnonymously } from 'firebase/auth';
