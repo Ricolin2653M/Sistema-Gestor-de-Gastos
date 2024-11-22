@@ -72,8 +72,12 @@ const ModalEdit = ({ isVisible, onCancel, loading, setLoading, expense, fetchDat
         onCancel();
     };
 
-    const depositTypes = [
-        { label: 'Compras', value: '672c311d930d26f0a46e97c9' }
+    const expenseTypes = [
+        { label: 'Compras', value: '672c311d930d26f0a46e97c9' },
+        { label: 'Salud', value: '673ff8db84a52693c81859e4' },
+        { label: 'Alimentación', value: '673ff89384a52693c81859de' },
+        { label: 'Transporte', value: '673ff8af84a52693c81859e0' },
+        { label: 'Entretenimiento', value: '673ff8c884a52693c81859e2' },
     ];
 
     return (
@@ -128,7 +132,7 @@ const ModalEdit = ({ isVisible, onCancel, loading, setLoading, expense, fetchDat
                     <Select
                         mode="multiple"
                         placeholder="Selecciona un tipo"
-                        options={depositTypes} // Lista de tipos de depósito
+                        options={expenseTypes} // Lista de tipos de depósito
                     />
                 </Form.Item>
 
