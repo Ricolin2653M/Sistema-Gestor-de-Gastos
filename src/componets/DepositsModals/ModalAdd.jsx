@@ -70,7 +70,11 @@ const ModalAdd = ({ isVisible, onCancel, loading, setLoading, fetchData, userId 
 
     // Lista de tipos de depósito (en este caso, solo "Ahorro")
     const depositTypes = [
-        { label: 'Ahorro', value: '672c63e14206664f86000000' }
+        { label: 'Ahorro', value: '672c63914206654f86000000' },
+        { label: 'Inversión', value: '673f73a1eeca0a361942e835' },
+        { label: 'Sueldo', value: '673ffa0a84a52693c81859e8' },
+        { label: 'Ventas', value: '673ffabc84a52693c81859ea' },
+        { label: 'Reembolso', value: '673ffafb84a52693c81859ec' }
     ];
 
     return (

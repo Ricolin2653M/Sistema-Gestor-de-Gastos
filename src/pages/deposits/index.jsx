@@ -101,6 +101,14 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
     setIsDeleteModalVisible(true);
   };
 
+  const depositTypes = [
+    { label: 'Compras', value: '672c311d930d26f0a46e97c9' },
+    { label: 'Salud', value: '673ff8db84a52693c81859e4' },
+    { label: 'Alimentación', value: '673ff89384a52693c81859de' },
+    { label: 'Transporte', value: '673ff8af84a52693c81859e0' },
+    { label: 'Entretenimiento', value: '673ff8c884a52693c81859e2' },
+];
+  
   const columns = [
     {
       title: 'Titulo',
@@ -113,11 +121,11 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
       dataIndex: 'type',
       key: 'type',
       render: (type) => (
-        type && type.length > 0 ? type.join(", ") : "No Type"
+        type ? type : "No Type"
       ),
       width: 150,
-      className: 'ant-table-column-type',
-    },
+      className: 'ant-table-column-type', // Clase para ocultar en móviles
+    },    
     {
       title: 'Descripción',
       dataIndex: 'description',
