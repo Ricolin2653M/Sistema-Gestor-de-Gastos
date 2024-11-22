@@ -8,13 +8,13 @@ import ModalAdd from '../../componets/ExpensesModals/ModalAdd';
 import ModalEdit from '../../componets/ExpensesModals/ModalEdit';
 import ModalDelete from '../../componets/ExpensesModals/ModalDelete';
 
-//Imports push notifications
+// Imports push notifications
 import { getToken, onMessage } from 'firebase/messaging';
 import { messaging } from '../../firebase';
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Expenses = () => {
+const Expenses = ({ showAddButton = true }) => {
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
   const [userId, setUserId] = useState(null);
@@ -26,56 +26,47 @@ const Expenses = () => {
   const [expenseToEdit, setexpenseToEdit] = useState(null);
   const [expenseToDelete, setexpenseToDelete] = useState(null);
 
-
   const getTokenNotification = async () => {
     const token = await getToken(messaging, {
         vapidKey: 'BFm1JIsWvokI9-0Y1HAX9QxPH0Vmvcph9U5jGYZkq2OMDc8S8sHrNAqGzTfxNL8D4KTETCIw39F9t7po-f9AoLM'
-    }).catch((err) => console.log('No se pudo obtener el token', err))
+    }).catch((err) => console.log('No se pudo obtener el token', err));
 
     if (token) {
-        console.log('Token si: ', token)
+        console.log('Token si: ', token);
     }
     if (!token) {
-        console.log('No se pudo obtener el token')
+        console.log('No se pudo obtener el token');
     }
   };
 
   const notificarme = () => {
-      if (!window.Notification) {
-          console.log('Este navegador no soporta notificaciones');
-          return;
-      }
-      if (Notification.permission === 'granted') {
-          getTokenNotification(); //Obtener y mostrar el token en la consola
-      }
-      else if(Notification.permission !== 'denied' || Notification.permission === 'default'){
-          Notification.requestPermission((permission) => {
-              console.log(permission)
-              if (permission === 'granted') {
-                  getTokenNotification(); //Obtener y mostrar el token en la consola
-              }
-          });
-      }
+    if (!window.Notification) {
+        console.log('Este navegador no soporta notificaciones');
+        return;
+    }
+    if (Notification.permission === 'granted') {
+        getTokenNotification(); // Obtener y mostrar el token
+    }
+    else if(Notification.permission !== 'denied' || Notification.permission === 'default'){
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                getTokenNotification(); // Obtener y mostrar el token
+            }
+        });
+    }
   };
-  notificarme();
-
-
 
   useEffect(() => {
     if (user && user._id) {
       setUserId(user._id);
       fetchDeposits(user._id);
 
-      getTokenNotification()
-        onMessage(messaging, message => {
-            console.log('onMessage: ', message)
-            toast( message.notification.title)
-            console.log(message.notification.title)
-    })
-
+      getTokenNotification();
+      onMessage(messaging, message => {
+          console.log('onMessage: ', message);
+          toast(message.notification.title);
+      });
     }
-
-    
   }, [user]);
 
   const fetchDeposits = async (userId) => {
@@ -107,45 +98,43 @@ const Expenses = () => {
     setexpenseToDelete(deposit);
     setIsDeleteModalVisible(true);
   };
-  
+
   const columns = [
     {
-      title: 'Title',
+      title: 'Titulo',
       dataIndex: 'title',
       key: 'title',
       width: 200,
     },
     {
-      title: 'Type',
+      title: 'Tipo',
       dataIndex: 'type',
       key: 'type',
-      render: (type) => (
-        type && type.length > 0 ? type.join(", ") : "No Type"
-      ),
+      render: (type) => (type && type.length > 0 ? type.join(", ") : "No Type"),
       width: 150,
     },
     {
-      title: 'Description',
+      title: 'Descripción',
       dataIndex: 'description',
       key: 'description',
       width: 300,
       ellipsis: true,
     },
     {
-      title: 'Date',
+      title: 'Fecha ',
       dataIndex: 'date',
       key: 'date',
       render: (date) => moment(date).format('YYYY-MM-DD'),
       width: 200,
     },
     {
-      title: 'Amount',
+      title: 'Cantidad',
       dataIndex: 'amount',
       key: 'amount',
       width: 200,
     },
     {
-      title: 'Actions',
+      title: 'Accicones ',
       key: 'actions',
       render: (text, record) => (
         <>
@@ -154,13 +143,13 @@ const Expenses = () => {
             style={{ marginRight: 8 }} 
             shape="circle" 
             className="hover-edit" 
-            onClick={() => handleEditClick(record)} // Editar al hacer clic
+            onClick={() => handleEditClick(record)} 
           />
           <Button 
             icon={<DeleteOutlined />} 
             shape="circle" 
             className="hover-delete" 
-            onClick={() => handleDeleteClick(record)} // Eliminar al hacer clic
+            onClick={() => handleDeleteClick(record)} 
           />
         </>
       ),
@@ -172,13 +161,15 @@ const Expenses = () => {
     <div>
       <ToastContainer />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 className="deposits-titulo">Payments</h1>
-        <button className="add-transaction-btn" onClick={showModal}>
-          <p className="add-transaction-name">Add payments</p>
-          <span className="icon">
-            <PlusOutlined />
-          </span>
-        </button>
+        <h1 className="deposits-titulo">Pagos</h1>
+        {showAddButton && (
+          <button className="add-transaction-btn" onClick={showModal}>
+            <p className="add-transaction-name">Agregar Pagos</p>
+            <span className="icon">
+              <PlusOutlined />
+            </span>
+          </button>
+        )}
       </div>
 
       <div className="table-container">
@@ -211,6 +202,7 @@ const Expenses = () => {
         fetchData={() => fetchDeposits(userId)} 
         userId={userId}
       />
+
       {/* Modal para eliminar un gasto */}
       <ModalDelete 
         isVisible={isDeleteModalVisible} 

@@ -8,13 +8,13 @@ import ModalAdd from '../../componets/DepositsModals/ModalAdd';
 import ModalEdit from '../../componets/DepositsModals/ModalEdit';
 import ModalDelete from '../../componets/DepositsModals/ModalDelete';
 
-//Imports push notifications
+// Imports push notifications
 import { getToken, onMessage } from 'firebase/messaging';
 import { messaging } from '../../firebase';
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Deposits = () => {
+const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
   const [userId, setUserId] = useState(null);
@@ -26,17 +26,16 @@ const Deposits = () => {
   const [depositToEdit, setDepositToEdit] = useState(null);
   const [depositToDelete, setDepositToDelete] = useState(null);
 
-
   const getTokenNotification = async () => {
     const token = await getToken(messaging, {
         vapidKey: 'BFm1JIsWvokI9-0Y1HAX9QxPH0Vmvcph9U5jGYZkq2OMDc8S8sHrNAqGzTfxNL8D4KTETCIw39F9t7po-f9AoLM'
-    }).catch((err) => console.log('No se pudo obtener el token', err))
+    }).catch((err) => console.log('No se pudo obtener el token', err));
 
     if (token) {
-        console.log('Token no: ', token)
+        console.log('Token no: ', token);
     }
     if (!token) {
-        console.log('No se pudo obtener el token')
+        console.log('No se pudo obtener el token');
     }
   };
 
@@ -46,35 +45,29 @@ const Deposits = () => {
           return;
       }
       if (Notification.permission === 'granted') {
-          getTokenNotification(); //Obtener y mostrar el token en la consola
+          getTokenNotification(); // Obtener y mostrar el token en la consola
       }
       else if(Notification.permission !== 'denied' || Notification.permission === 'default'){
           Notification.requestPermission((permission) => {
               console.log(permission)
               if (permission === 'granted') {
-                  getTokenNotification(); //Obtener y mostrar el token en la consola
+                  getTokenNotification(); // Obtener y mostrar el token en la consola
               }
           });
       }
   };
   notificarme();
 
-
   useEffect(() => {
     if (user && user._id) {
       setUserId(user._id);
       fetchDeposits(user._id);
-
-      getTokenNotification()
-        onMessage(messaging, message => {
-            console.log('onMessage: ', message)
-            toast( message.notification.title)
-            console.log(message.notification.title)
-
-    })
+      getTokenNotification();
+      onMessage(messaging, message => {
+        console.log('onMessage: ', message);
+        toast(message.notification.title);
+      });
     }
-
-    
   }, [user]);
 
   const fetchDeposits = async (userId) => {
@@ -107,46 +100,46 @@ const Deposits = () => {
     setDepositToDelete(deposit);
     setIsDeleteModalVisible(true);
   };
-  
+
   const columns = [
     {
-      title: 'Title',
+      title: 'Titulo',
       dataIndex: 'title',
       key: 'title',
       width: 200,
     },
     {
-      title: 'Type',
+      title: 'Tipo',
       dataIndex: 'type',
       key: 'type',
       render: (type) => (
         type && type.length > 0 ? type.join(", ") : "No Type"
       ),
       width: 150,
-      className: 'ant-table-column-type', // Clase para ocultar en móviles
+      className: 'ant-table-column-type',
     },
     {
-      title: 'Description',
+      title: 'Descripción',
       dataIndex: 'description',
       key: 'description',
       width: 300,
       ellipsis: true,
     },
     {
-      title: 'Date',
+      title: 'Fecha',
       dataIndex: 'date',
       key: 'date',
       render: (date) => moment(date).format('YYYY-MM-DD'),
       width: 200,
     },
     {
-      title: 'Amount',
+      title: 'Cantidad',
       dataIndex: 'amount',
       key: 'amount',
       width: 200,
     },
     {
-      title: 'Actions',
+      title: 'Acciones',
       key: 'actions',
       render: (text, record) => (
         <>
@@ -155,18 +148,18 @@ const Deposits = () => {
             style={{ marginRight: 8 }} 
             shape="circle" 
             className="hover-edit" 
-            onClick={() => handleEditClick(record)} // Editar al hacer clic
+            onClick={() => handleEditClick(record)} 
           />
           <Button 
             icon={<DeleteOutlined />} 
             shape="circle" 
             className="hover-delete" 
-            onClick={() => handleDeleteClick(record)} // Eliminar al hacer clic
+            onClick={() => handleDeleteClick(record)} 
           />
         </>
       ),
       width: 150,
-      className: 'ant-table-column-actions', // Clase para ocultar en móviles
+      className: 'ant-table-column-actions',
     },
   ];
 
@@ -174,13 +167,15 @@ const Deposits = () => {
     <div>
       <ToastContainer />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 className="deposits-titulo">Deposits</h1>
-        <button className="add-transaction-btn" onClick={showModal}>
-          <p className="add-transaction-name">Add deposit</p>
-          <span className="icon">
-            <PlusOutlined />
-          </span>
-        </button>
+        <h1 className="deposits-titulo">Depositos</h1>
+        {showAddButton && (
+          <button className="add-transaction-btn" onClick={showModal}>
+            <p className="add-transaction-name">Agregar deposito</p>
+            <span className="icon">
+              <PlusOutlined />
+            </span>
+          </button>
+        )}
       </div>
 
       <div className="table-container">
