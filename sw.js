@@ -143,4 +143,4 @@ self.addEventListener('sync', event => {
     if (event.tag === 'nueva-expense') {
         event.waitUntil(postearExpenses());
     }
-});
+ });
