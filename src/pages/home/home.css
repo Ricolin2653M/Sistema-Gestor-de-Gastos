@@ -37,7 +37,7 @@ html, body {
   gap: 20px;
   width: 100%;
   max-width: 1200px;
-  margin-top: 30px; /* Ajustar si es necesario */
+  margin-top: 100px; /* Ajustar si es necesario */
 }
 
 .table-wrapper {
@@ -93,4 +93,10 @@ th {
     padding: 3px 5px;  /* Reducir aún más el padding para hacerlo más delgado */
     font-size: 10px;  /* Reducir el tamaño de la fuente en pantallas pequeñas */
   }
+}
+
+
+/* Sección que contiene las tablas */
+.graficas {
+  margin-top: 1300px; /* Ajustar si es necesario */
 }
