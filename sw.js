@@ -17,7 +17,6 @@ const STATIC_FILES = [
 ];
 
 const INMUTABLE_FILES = [
-    'https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Roboto:wght@100&display=swap',
     'https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js',
     'https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics-compat.js',
     'https://cdn.jsdelivr.net/npm/pouchdb@9.0.0/dist/pouchdb.min.js'

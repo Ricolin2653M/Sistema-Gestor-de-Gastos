@@ -44,8 +44,6 @@ const ModalEdit = ({ isVisible, onCancel, loading, setLoading, expense, fetchDat
                 idUser: userId,
             };
     
-            console.log("Datos que se enviarán:", updatedGasto);
-    
             // Realizar la actualización del gasto
             const response = await expenseService.updateExpense(token, expense._id, userId, updatedGasto);
     

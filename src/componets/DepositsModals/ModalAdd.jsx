@@ -37,10 +37,7 @@ const ModalAdd = ({ isVisible, onCancel, loading, setLoading, fetchData, userId 
                 idUser: userId,
             };
     
-            console.log("Datos que se enviarán:", deposito);
-    
             const response = await depositService.createDeposit(token, deposito);
-            console.log("Respuesta del servidor:", response);
     
             if (response && response.success) {
                 notification.success({ message: 'Depósito creado con éxito', placement: 'bottomRight' });

@@ -37,11 +37,7 @@ const ModalAdd = ({ isVisible, onCancel, loading, setLoading, fetchData, userId 
                 idUser: userId,
             };
     
-            console.log("Datos que se enviarán:", gasto);
-    
             const response = await expenseService.createExpense(token, gasto);
-            console.log("Respuesta del servidor:", response);
-    
             if (response && response.success) {
                 notification.success({ message: 'Gasto creado con éxito', placement: 'bottomRight' });
                 fetchData();

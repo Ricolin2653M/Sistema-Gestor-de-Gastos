@@ -18,7 +18,6 @@ const users = async (token) => {
 };
 
 const getMe = async (token) => {
-    console.log("este es un console.log del token: "+token)
     try {
         if (!token || typeof token !== 'string') {
             throw new Error('Token inválido');

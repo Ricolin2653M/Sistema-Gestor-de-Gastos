@@ -43,8 +43,7 @@ const ModalEdit = ({ isVisible, onCancel, loading, setLoading, deposito, fetchDa
                 type: values.type,
                 idUser: userId,
             };
-    
-            console.log("Datos que se enviarán:", updatedDeposito);
+
     
             // Realizar la actualización del depósito
             const response = await depositService.updateDeposit(token, deposito._id, userId, updatedDeposito);

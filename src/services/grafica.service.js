@@ -18,7 +18,6 @@ const getExpenses = async (token, idUser) => {
         }
 
         const data = await response.json();
-        console.log("Respuesta de gastos:", data); // Agregar este log
         return data;
     } catch (error) {
         console.error('Error en función getExpenses:', error);
@@ -41,7 +40,6 @@ const getDeposits = async (token, idUser) => {
         }
 
         const data = await response.json();
-        console.log("Respuesta de depósitos:", data); // Agregar este log
         return data;
     } catch (error) {
         console.error('Error en función getDeposits:', error);

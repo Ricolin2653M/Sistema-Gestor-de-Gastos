@@ -20,8 +20,7 @@ export const AuthProvider = (props) => {
 
     const getSession = async () => {
         const token = await storageController.getToken();
-        
-        console.log("Token:", token);
+    
 
         if (!token) {
             logout();

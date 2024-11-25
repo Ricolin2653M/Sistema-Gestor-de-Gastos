@@ -22,7 +22,6 @@ const guardarExpense = (expense) => {
 const postearNotas = () => {
     const notasPost = [];
     return db.allDocs({ include_docs: true }).then(docs => {
-        console.log('se ahn encontrado Depositos en index DB');
         docs.rows.forEach(row => {
             const doc = row.doc;
             const data = {
@@ -55,7 +54,6 @@ const postearNotas = () => {
 const postearExpenses = () => {
     const expensesPost = [];
     return dbExpenses.allDocs({ include_docs: true }).then(docs => {
-        console.log('se ahn encontrado gatos en index DB');
 
         docs.rows.forEach(row => {
             const doc = row.doc;

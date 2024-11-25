@@ -5,7 +5,6 @@ const authDebugService = {
     try {
       const response = await authService.loginF(username, password);
       if (response && response.data) {
-        console.log('Generated Token:', response.data.generatedToken); // Aquí se imprime el token
         return response.data.generatedToken;
       } else {
         console.error('Error en el inicio de sesión: Respuesta inesperada');

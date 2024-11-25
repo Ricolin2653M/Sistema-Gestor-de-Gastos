@@ -90,8 +90,6 @@ const Graficas = () => {
 
       // Obtener los gastos
       graficaService.getExpenses(user.token, user._id).then(data => {
-        console.log("Tipos de gastos:", data.types);
-        console.log("Totales de gastos:", data.totals);
 
         // Asegurarse de que los datos están correctos antes de establecer el estado
         if (data.totals && Array.isArray(data.totals)) {
@@ -106,8 +104,6 @@ const Graficas = () => {
 
       // Obtener los depósitos
       graficaService.getDeposits(user.token, user._id).then(data => {
-        console.log("Tipos de depósitos:", data.types);
-        console.log("Totales de depósitos:", data.totals);
 
         // Asegurarse de que los datos están correctos antes de establecer el estado
         if (data.totals && Array.isArray(data.totals)) {
