@@ -3,7 +3,7 @@ import { Form, Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../hooks/useAuth';
 import authService from '../../services/auth.service.js';
-import img from '../../assets/img/finance3.png'
+import img from '../../assets/img/finance3.webp'
 import "./login.css";
 
 //Imports firebase
