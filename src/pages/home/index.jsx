@@ -7,25 +7,15 @@ import "./home.css";
 const Home = () => {
   return (
     <div className="home-container">
-      <div className="graficas">
-        <Grafica/>
+      <div className="graph-section">
+        <Grafica />
       </div>
-      
-      <div className="table-section">
-        {/* Título para la tabla de Deposits */}
-        <div className="table-wrapper">
-       
-          <div className="table-wrapper">
-          <Deposits showAddButton={false} /> {/* Oculta el botón de agregar */}
-        </div>
-        
-        </div>
-        
-        {/* Título para la tabla de Expenses */}
-        <div className="table-wrapper">
-         
+
+      <div className="data-sections">
+        <Deposits showAddButton={false} />
+      </div>
+      <div className="data-sections">
         <Expenses showAddButton={false} />
-        </div>
       </div>
     </div>
   );

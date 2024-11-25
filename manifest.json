@@ -1,39 +1,51 @@
 {
-    "short_name": "AplicacionNGP ",
+    "short_name": "AplicacionSGP",
     "name": "App de Sistema de Gestión de Gastos",
-    "start_url":"/index.html",
-    "background_color":"#2148c0",
-    "theme_color":"#2148c0",
-    "display":"standalone",
-    "id":"proyecto",
-    "orientation":"portrait",
-    "icons":[
+    "start_url": "index.html",
+    "background_color": "#2148C0",
+    "theme_color": "#2148C0",
+    "display": "standalone",
+    "id": "appSGP",
+    "orientation": "portrait",
+    "icons": [
         {
-        
+            "src": "icons/favicon-16x16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
             "src": "icons/logo-64x64.png",
-            "type":"image/png",
-            "sizes":"64x64"
+            "sizes": "64x64",
+            "type": "image/png"
         },
         {
-        
             "src": "icons/logo-192x192.png",
-            "type":"image/png",
-            "sizes":"192x192"
+            "sizes": "192x192",
+            "type": "image/png"
         },
-    
-    {
-        "src": "icons/logo-512x512.png",
-        "type":"image/png",
-        "sizes":"512x512"
-    }
-   
-   
-],
-"splash_pages":"null",
-"splash_screen":
-{
-    "show":true,
-    "src":"splash-screen.png"
-}
-
+        {
+            "src": "icons/logo-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "screenshots/wide-screenshot.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
+            "src": "screenshots/mobile-screenshot.png",
+            "sizes": "720x1280",
+            "type": "image/png",
+            "form_factor": "narrow"
+        }
+    ]
 }

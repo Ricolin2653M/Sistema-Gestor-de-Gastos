@@ -1,102 +1,54 @@
-/* Asegura que el cuerpo tenga un mínimo de espacio para evitar que el contenido se oculte */
-html, body {
+/* home.css */
+
+body, html {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #ffffff !important;
-  min-height: 100vh;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto; /* Evita el scroll doble */
 }
 
-/* Asegura que la navegación fija no tape el contenido */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000; /* Asegura que la barra de navegación esté encima del contenido */
-  background-color: #333; /* Color de fondo para la nav */
-  padding: 10px 20px;
+div {
+  box-sizing: border-box;
 }
 
-/* Contenedor principal */
 .home-container {
-  min-height: 100vh;
-  overflow-y: auto;
-  background-color: #ffffff;
-  padding: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 60px; /* Ajustar según la altura de tu navbar para evitar que se tape el contenido */
+  width: 100%;
+  height: 100vh;
+  padding: 10px;
+  background-color: #f5f5f5; /* Opcional: color de fondo */
 }
 
-/* Sección que contiene las tablas */
-.table-section {
+.graph-section {
+  width: 100%;
+  max-width: 1200px; /* Ajustar a tu preferencia */
+  margin-bottom: 20px;
+}
+
+.data-sections {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 1200px;
-  margin-top: 100px; /* Ajustar si es necesario */
+  width: 100%; /* Ocupa todo el ancho disponible */
+  align-items: center; /* Centra las tablas */
+  gap: 20px; /* Espaciado entre las tablas */
+  max-width: 1200px; /* Límite máximo para las secciones */
 }
 
-.table-wrapper {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  width: 100%;
-  margin-bottom: 20px; /* Espacio entre tablas */
-  max-height: 400px;  /* Limitar la altura de las tablas para permitir desplazamiento */
+.data-sections > * {
+  width: auto; /* Mantiene el tamaño original de los componentes */
+  max-width: 100%; /* Evita que se desborden */
+  box-sizing: border-box; /* Incluye padding y border en el ancho */
+  overflow: hidden; /* Oculta cualquier desbordamiento */
 }
 
-.table-wrapper table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed; /* Hace que las celdas tengan un tamaño fijo */
-}
-
-th, td {
-  padding: 4px 6px;  /* Reducir más el padding para hacerlo más delgado */
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; /* Evita que el texto se desborde */
-  font-size: 12px;  /* Reducir el tamaño de la fuente para hacerlo más compacto */
-}
-
-th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-}
-
-/* Contenedor de la tabla con barra de desplazamiento */
-.table-wrapper {
-  overflow-y: auto;  /* Permite el desplazamiento vertical */
-  max-height: 300px;  /* Ajusta según el tamaño de la tabla que deseas */
-}
-
-/* Responsividad */
-@media screen and (max-width: 768px) {
-  .table-wrapper {
-    max-height: none;
+@media (min-width: 768px) {
+  .data-sections {
+    flex-direction: row; /* En pantallas grandes, componentes en fila */
+    justify-content: space-between;
   }
-
-  table {
-    display: block;
-    overflow-x: auto; /* Permite el desplazamiento horizontal en pantallas pequeñas */
-    white-space: nowrap; /* Evita el salto de línea dentro de las celdas */
-  }
-
-  th, td {
-    padding: 3px 5px;  /* Reducir aún más el padding para hacerlo más delgado */
-    font-size: 10px;  /* Reducir el tamaño de la fuente en pantallas pequeñas */
-  }
-}
-
-
-/* Sección que contiene las tablas */
-.graficas {
-  margin-top: 1300px; /* Ajustar si es necesario */
 }

@@ -3,6 +3,7 @@ import { Form, Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../hooks/useAuth';
 import authService from '../../services/auth.service.js';
+import img from '../../assets/img/finance3.png'
 import "./login.css";
 
 //Imports firebase
@@ -49,7 +50,7 @@ const Login = () => {
     <div className="login-page">
       <div className="login-left">
         <div className="icon-container">
-          <img src="./../src/assets/img/finance3.png" alt="Icono o imagen" className="icon" />
+          <img src={img} alt="Icono o imagen" className="icon" />
           <p className="icon-text">Gestiona tus gastos fácilmente</p>
         </div>
       </div>

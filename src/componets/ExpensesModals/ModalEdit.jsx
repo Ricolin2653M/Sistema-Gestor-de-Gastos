@@ -130,7 +130,6 @@ const ModalEdit = ({ isVisible, onCancel, loading, setLoading, expense, fetchDat
                     rules={[{ required: true, message: 'Por favor seleccione el tipo de Gasto' }]}
                 >
                     <Select
-                        mode="multiple"
                         placeholder="Selecciona un tipo"
                         options={expenseTypes} // Lista de tipos de depósito
                     />

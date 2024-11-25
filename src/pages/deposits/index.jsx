@@ -4,9 +4,10 @@ import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { AuthContext } from '../../context/AuthContext';
 import { depositService } from '../../services/deposit.services';
 import moment from 'moment';
-import ModalAdd from '../../componets/DepositsModals/ModalAdd'; 
+import ModalAdd from '../../componets/DepositsModals/ModalAdd';
 import ModalEdit from '../../componets/DepositsModals/ModalEdit';
 import ModalDelete from '../../componets/DepositsModals/ModalDelete';
+import './depositos.css';
 
 // Imports push notifications
 import { getToken, onMessage } from 'firebase/messaging';
@@ -14,57 +15,23 @@ import { messaging } from '../../firebase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
+const Deposits = ({ showAddButton = true }) => {
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
   const [userId, setUserId] = useState(null);
   const [deposits, setDeposits] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false); 
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [depositToEdit, setDepositToEdit] = useState(null);
   const [depositToDelete, setDepositToDelete] = useState(null);
 
-  const getTokenNotification = async () => {
-    const token = await getToken(messaging, {
-        vapidKey: 'BFm1JIsWvokI9-0Y1HAX9QxPH0Vmvcph9U5jGYZkq2OMDc8S8sHrNAqGzTfxNL8D4KTETCIw39F9t7po-f9AoLM'
-    }).catch((err) => console.log('No se pudo obtener el token', err));
-
-    if (token) {
-        console.log('Token no: ', token);
-    }
-    if (!token) {
-        console.log('No se pudo obtener el token');
-    }
-  };
-
-  const notificarme = () => {
-      if (!window.Notification) {
-          console.log('Este navegador no soporta notificaciones');
-          return;
-      }
-      if (Notification.permission === 'granted') {
-          getTokenNotification(); // Obtener y mostrar el token en la consola
-      }
-      else if(Notification.permission !== 'denied' || Notification.permission === 'default'){
-          Notification.requestPermission((permission) => {
-              console.log(permission)
-              if (permission === 'granted') {
-                  getTokenNotification(); // Obtener y mostrar el token en la consola
-              }
-          });
-      }
-  };
-  notificarme();
-
   useEffect(() => {
     if (user && user._id) {
       setUserId(user._id);
       fetchDeposits(user._id);
-      getTokenNotification();
       onMessage(messaging, message => {
-        console.log('onMessage: ', message);
         toast(message.notification.title);
       });
     }
@@ -73,10 +40,8 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
   const fetchDeposits = async (userId) => {
     try {
       const depositsData = await depositService.getDeposits(token, userId);
-      console.log("Depósitos obtenidos: ", depositsData);
       setDeposits(depositsData);
     } catch (error) {
-      console.error('Error al obtener los depósitos:', error);
       notification.error({ message: 'Error al obtener los depósitos' });
     }
   };
@@ -101,17 +66,9 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
     setIsDeleteModalVisible(true);
   };
 
-  const depositTypes = [
-    { label: 'Compras', value: '672c311d930d26f0a46e97c9' },
-    { label: 'Salud', value: '673ff8db84a52693c81859e4' },
-    { label: 'Alimentación', value: '673ff89384a52693c81859de' },
-    { label: 'Transporte', value: '673ff8af84a52693c81859e0' },
-    { label: 'Entretenimiento', value: '673ff8c884a52693c81859e2' },
-];
-  
   const columns = [
     {
-      title: 'Titulo',
+      title: 'Título',
       dataIndex: 'title',
       key: 'title',
       width: 200,
@@ -120,12 +77,10 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
       title: 'Tipo',
       dataIndex: 'type',
       key: 'type',
-      render: (type) => (
-        type ? type : "No Type"
-      ),
+      render: (type) => (type ? type : "No Type"),
       width: 150,
-      className: 'ant-table-column-type', // Clase para ocultar en móviles
-    },    
+      className: 'deposits-table-column-type',
+    },
     {
       title: 'Descripción',
       dataIndex: 'description',
@@ -151,82 +106,83 @@ const Deposits = ({ showAddButton = true }) => {  // Agregar prop showAddButton
       key: 'actions',
       render: (text, record) => (
         <>
-          <Button 
-            icon={<EditOutlined />} 
-            style={{ marginRight: 8 }} 
-            shape="circle" 
-            className="hover-edit" 
-            onClick={() => handleEditClick(record)} 
+          <Button
+            icon={<EditOutlined />}
+            style={{ marginRight: 8 }}
+            shape="circle"
+            className="deposits-hover-edit"
+            onClick={() => handleEditClick(record)}
           />
-          <Button 
-            icon={<DeleteOutlined />} 
-            shape="circle" 
-            className="hover-delete" 
-            onClick={() => handleDeleteClick(record)} 
+          <Button
+            icon={<DeleteOutlined />}
+            shape="circle"
+            className="deposits-hover-delete"
+            onClick={() => handleDeleteClick(record)}
           />
         </>
       ),
       width: 150,
-      className: 'ant-table-column-actions',
+      className: 'deposits-table-column-actions',
     },
   ];
 
   return (
-    <div>
-      <ToastContainer />
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 className="deposits-titulo">Depositos</h1>
-        {showAddButton && (
-          <button className="add-transaction-btn" onClick={showModal}>
-            <p className="add-transaction-name">Agregar deposito</p>
-            <span className="icon">
-              <PlusOutlined />
-            </span>
-          </button>
-        )}
-      </div>
+    <>
+      <br />
+      <div className="deposits-container">
+        <ToastContainer />
+        <div className="deposits-header">
+          <h1 className="deposits-title">Depósitos</h1>
+          {showAddButton && (
+            <button className="deposits-add-button" onClick={showModal}>
+              <p className="deposits-add-text">Agregar depósito </p>
+              <span className="deposits-icon">
+                <PlusOutlined />
+              </span>
+            </button>
+          )}
+        </div>
 
-      <div className="table-container">
-        <Table
-          columns={columns}
-          dataSource={deposits}
-          rowKey="_id"
-          pagination={{ pageSize: 5 }}
-          scroll={{ y: 300 }}
+        <div className="deposits-table-container">
+          <Table
+            columns={columns}
+            dataSource={deposits}
+            rowKey="_id"
+            pagination={{ pageSize: 5 }}
+            scroll={{ y: 300 }}
+          />
+        </div>
+
+        <ModalAdd
+          isVisible={isModalVisible}
+          onCancel={handleCancel}
+          loading={loading}
+          setLoading={setLoading}
+          fetchData={() => fetchDeposits(userId)}
+          userId={userId}
+        />
+
+        <ModalEdit
+          isVisible={isEditModalVisible}
+          onCancel={handleCancel}
+          loading={loading}
+          setLoading={setLoading}
+          deposito={depositToEdit}
+          fetchData={() => fetchDeposits(userId)}
+          userId={userId}
+        />
+
+        <ModalDelete
+          isVisible={isDeleteModalVisible}
+          onCancel={handleCancel}
+          deposito={depositToDelete}
+          loading={loading}
+          setLoading={setLoading}
+          fetchData={() => fetchDeposits(userId)}
+          userId={userId}
         />
       </div>
-
-      {/* Modal para agregar nuevo depósito */}
-      <ModalAdd 
-        isVisible={isModalVisible} 
-        onCancel={handleCancel} 
-        loading={loading} 
-        setLoading={setLoading} 
-        fetchData={() => fetchDeposits(userId)} 
-        userId={userId}
-      />
-
-      {/* Modal para editar un depósito */}
-      <ModalEdit 
-        isVisible={isEditModalVisible} 
-        onCancel={handleCancel} 
-        loading={loading} 
-        setLoading={setLoading} 
-        deposito={depositToEdit} 
-        fetchData={() => fetchDeposits(userId)} 
-        userId={userId}
-      />
-      {/* Modal para eliminar un depósito */}
-      <ModalDelete 
-        isVisible={isDeleteModalVisible} 
-        onCancel={handleCancel} 
-        deposito={depositToDelete} 
-        loading={loading} 
-        setLoading={setLoading} 
-        fetchData={() => fetchDeposits(userId)} 
-        userId={userId}
-      />
-    </div>
+    </>
   );
 };
 

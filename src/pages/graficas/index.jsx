@@ -4,6 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { graficaService } from '../../services/grafica.service';
 import Chart from 'react-apexcharts';
 import 'react-toastify/dist/ReactToastify.css';
+import './graficas.css'
 
 const Graficas = () => {
   const { user } = useContext(AuthContext);

@@ -9,6 +9,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <NavBar />
+        <br/>
         <AppRoutes />
       </AuthProvider>
     </BrowserRouter>

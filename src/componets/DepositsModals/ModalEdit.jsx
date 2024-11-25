@@ -133,7 +133,6 @@ const ModalEdit = ({ isVisible, onCancel, loading, setLoading, deposito, fetchDa
                     rules={[{ required: true, message: 'Por favor seleccione el tipo de depósito' }]}
                 >
                     <Select
-                        mode="multiple"
                         placeholder="Selecciona un tipo"
                         options={depositTypes} // Lista de tipos de depósito
                     />

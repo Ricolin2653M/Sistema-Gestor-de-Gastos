@@ -7,24 +7,34 @@ export default defineConfig({
   plugins: [
     viteStaticCopy({
       targets: [
-
         {
           src: 'sw.js',
           dest: ''
         },
         {
-          src: 'manifest.json',
-          dest: ''
+          src: 'js/app.js',
+          dest: 'js'
         },
         {
           src: 'public',
           dest: ''
         },
         {
-          src: 'icons',
+          src: 'js/sw-utils.js',
+          dest: 'js'
+        },
+        {
+          src: 'js/sw-bd.js',
+          dest: 'js'
+        },
+        {
+          src: 'public/icons',
           dest: 'icons'
         },
-
+        {
+          src: 'public/screenshots',
+          dest: 'screenshots'
+        },
       ],
     }),
     react(),
