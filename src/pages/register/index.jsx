@@ -65,8 +65,6 @@ const RegisterForm = () => {
       <div className="register-form-wrapper">
         <h2 className="register-form-header">Registrarse</h2>
         <div className="register-social-networks">
-          <IonIcon icon={logoInstagram} />
-          <IonIcon icon={logoTiktok} />
         </div>
         
 
