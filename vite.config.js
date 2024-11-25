@@ -35,6 +35,10 @@ export default defineConfig({
           src: 'public/screenshots',
           dest: 'screenshots'
         },
+        {
+          src: '.htaccess',
+          dest: ''
+        }
       ],
     }),
     react(),
